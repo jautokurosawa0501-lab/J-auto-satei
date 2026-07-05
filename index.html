@@ -118,30 +118,67 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
 .btn:hover{filter:brightness(1.08)}
 
-/* ===== 印刷（PDF保存） ===== */
+/* ===== 印刷（PDF保存）：出品票1枚に収まるよう圧縮レイアウト ===== */
 .print-only{display:none}
 @media print{
-  @page{size:A4;margin:9mm}
-  body{background:#fff;font-size:11px}
+  @page{size:A4;margin:6mm}
+  html,body{background:#fff;font-size:9px;line-height:1.25}
   header .date{display:block}
-  header{padding:6px 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header{padding:3px 8px}
+  header h1{font-size:13px}
+  header .sub{font-size:8px}
   .no-print{display:none !important}
   .print-only{display:block}
   .wrap{padding:0;max-width:none}
-  .grid{display:block}
-  .card{break-inside:avoid;margin-bottom:8px;border-radius:0}
-  .card h2{padding:4px 10px;font-size:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .card .body{padding:8px 10px}
-  .f input,.f select,.f textarea{border:none;border-bottom:1px solid #999;border-radius:0;padding:1px 2px;font-size:11px}
-  textarea{resize:none;overflow:hidden}
-  .chk{border:none;padding:1px 4px}
-  .chk:not(:has(input:checked)){opacity:.35}
-  .score-btn,.int-btn{display:none}
-  .score-btn.on,.int-btn.on{display:inline-block;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:6px;align-items:start}
+
+  .card{break-inside:avoid;margin-bottom:5px;border-radius:0;border:1px solid #888}
+  .card h2{padding:2px 6px;font-size:9.5px;background:#333 !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card h2 .tag{display:none}
+  .card .body{padding:4px 6px}
+
+  .frow{gap:4px;margin-bottom:4px}
+  .f label{font-size:7.5px;color:#555;margin-bottom:0}
+  .f input,.f select,.f textarea{
+    border:none;border-bottom:1px solid #999;border-radius:0;padding:0 1px;font-size:9px;height:14px;min-height:0}
+  textarea{resize:none;overflow:hidden;height:auto !important;min-height:14px}
+
+  .inline{gap:4px}
+  .chk{border:none;padding:0 3px;font-size:8px;gap:2px}
+  .chk:not(:has(input:checked)){opacity:.3}
+  .chk input{width:9px;height:9px}
+
+  .score-row,.int-row{gap:3px}
+  .score-btn,.int-btn{display:none;padding:2px 3px;min-width:0;font-size:11px;border-width:1px}
+  .score-btn small{display:none}
+  .score-btn.on,.int-btn.on{display:inline-block;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#333 !important;color:#fff !important;border-color:#333 !important}
+
   details.ref{display:none}
-  .marks-list{max-height:none;overflow:visible}
+
+  .pal-group{display:none}
+  .mode-hint{display:none}
+
+  .diagram-box{border:1px solid #888}
+  svg#car{max-height:190px;width:auto;margin:0 auto;display:block}
+
+  .marks-list{max-height:none;overflow:visible;border:1px solid #999}
+  .marks-list table{font-size:8px}
+  .marks-list th,.marks-list td{padding:1px 4px}
   .mark circle{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .calc .box{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .calc{gap:5px;margin-top:5px}
+  .calc .box{padding:3px 6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .calc .box .k{font-size:7.5px}
+  .calc .box .v{font-size:13px}
+  .calc-note{font-size:7px;margin-top:3px}
+
+  #notes,#inspector{font-size:9px;padding:3px 5px;min-height:30px}
+  .wrap > .card:nth-last-child(2),
+  .wrap > .card:nth-last-child(3){
+    display:inline-block;width:calc(50% - 4px);vertical-align:top;box-sizing:border-box;margin-right:6px
+  }
+  .wrap > .card:nth-last-child(2){margin-right:0}
 }
 </style>
 </head>
