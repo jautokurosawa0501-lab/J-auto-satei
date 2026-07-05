@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<!-- saved from url=(0101)file:///C:/Users/jauto/Downloads/J-AUTO_%E6%9F%BB%E5%AE%9A%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0_5.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J-AUTO 車両査定システム｜ASワンプラ検査基準準拠</title>
+<style>
+:root{
+  --navy:#16233B; --navy2:#22355A; --paper:#F5F4F0; --card:#FFFFFF;
+  --ink:#22262B; --line:#C9C7C0; --line2:#E3E1DB;
+  --red:#C8452C; --amber:#D99420; --blue:#2C5FA8; --teal:#1E7F7A;
+  --brown:#8A5A2B; --purple:#6C4BA3; --gray:#5B6470;
+  --radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.55}
+
+/* ===== ヘッダー ===== */
+header{background:var(--navy);color:#fff;padding:14px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+header h1{font-size:19px;letter-spacing:.06em}
+header .sub{font-size:12px;color:#AEC1E0;letter-spacing:.04em}
+header .date{margin-left:auto;font-size:12px;color:#AEC1E0}
+
+/* ===== レイアウト ===== */
+.wrap{max-width:1280px;margin:0 auto;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 560px;gap:18px;align-items:start}
+@media(max-width:1080px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:18px}
+.card h2{background:var(--navy2);color:#fff;font-size:14px;padding:8px 14px;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.card h2 .tag{font-size:10px;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:99px;font-weight:normal;letter-spacing:.05em}
+.card .body{padding:14px}
+
+/* ===== フォーム ===== */
+.frow{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-bottom:10px}
+.frow:last-child{margin-bottom:0}
+.f{display:flex;flex-direction:column;gap:3px}
+.f label{font-size:11px;color:#5B6470;letter-spacing:.04em}
+.f input[type=text],.f input[type=number],.f select,.f textarea{
+  border:1px solid var(--line);border-radius:5px;padding:6px 8px;font-size:14px;font-family:inherit;background:#fff;width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.c1{grid-column:span 1}.c2{grid-column:span 2}.c3{grid-column:span 3}.c4{grid-column:span 4}
+.c5{grid-column:span 5}.c6{grid-column:span 6}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media(max-width:640px){.c1,.c2,.c3,.c4{grid-column:span 6}.c5,.c6,.c8{grid-column:span 12}}
+.inline{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.chk{display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;user-select:none;
+  border:1px solid var(--line);border-radius:5px;padding:5px 10px;background:#fff}
+.chk input{accent-color:var(--navy2)}
+.chk:has(input:checked){background:#EAF0FA;border-color:var(--blue)}
+
+/* ===== 評価点セレクタ ===== */
+.score-row{display:flex;gap:6px;flex-wrap:wrap}
+.score-btn{border:1.5px solid var(--line);background:#fff;border-radius:6px;min-width:52px;padding:8px 4px;
+  font-size:18px;font-weight:700;cursor:pointer;text-align:center;color:var(--ink)}
+.score-btn small{display:block;font-size:9px;font-weight:normal;color:#777;margin-top:1px}
+.score-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.score-btn.on small{color:#AEC1E0}
+.int-row{display:flex;gap:6px}
+.int-btn{border:1.5px solid var(--line);background:#fff;border-radius:6px;width:64px;padding:8px 4px;
+  font-size:17px;font-weight:700;cursor:pointer}
+.int-btn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+details.ref{margin-top:10px;border:1px solid var(--line2);border-radius:6px;background:#FAFAF7}
+details.ref summary{cursor:pointer;padding:8px 12px;font-size:12px;color:var(--blue);user-select:none}
+details.ref .rbody{padding:0 12px 12px;overflow-x:auto}
+table.ref-t{border-collapse:collapse;width:100%;font-size:11.5px}
+table.ref-t th,table.ref-t td{border:1px solid var(--line2);padding:5px 7px;text-align:left;vertical-align:top}
+table.ref-t th{background:#EEF1F6;white-space:nowrap}
+
+/* ===== 記号パレット ===== */
+.pal-group{margin-bottom:10px}
+.pal-group .gname{font-size:11px;color:#5B6470;margin-bottom:4px;letter-spacing:.04em}
+.pal{display:flex;gap:5px;flex-wrap:wrap}
+.sym{border:1.5px solid var(--line);background:#fff;border-radius:6px;padding:5px 9px;font-weight:700;
+  font-size:13px;cursor:pointer;position:relative}
+.sym .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:var(--ink);color:#fff;font-size:10.5px;font-weight:normal;padding:4px 8px;border-radius:4px;
+  white-space:nowrap;z-index:30;pointer-events:none}
+.sym:hover .tip{display:block}
+.sym.on{color:#fff}
+.g-kizu.on{background:var(--red);border-color:var(--red)}
+.g-heko.on{background:var(--amber);border-color:var(--amber)}
+.g-b.on{background:var(--purple);border-color:var(--purple)}
+.g-w.on{background:var(--blue);border-color:var(--blue)}
+.g-sabi.on{background:var(--brown);border-color:var(--brown)}
+.g-other.on{background:var(--gray);border-color:var(--gray)}
+.g-glass.on{background:var(--teal);border-color:var(--teal)}
+.sym.erase{border-style:dashed}
+.sym.erase.on{background:var(--ink);border-color:var(--ink)}
+.mode-hint{font-size:12px;background:#FFF7E6;border:1px solid #EAD9A8;border-radius:6px;padding:7px 10px;margin-bottom:10px}
+.mode-hint b{color:var(--red)}
+
+/* ===== 展開図 ===== */
+.diagram-box{border:1px solid var(--line);border-radius:6px;background:#fff;position:relative}
+svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
+.panel{fill:#FDFDFB;stroke:#3A4356;stroke-width:1.6}
+.panel-label{font-size:11px;fill:#8A90A0;pointer-events:none;text-anchor:middle}
+.mark circle{stroke:#fff;stroke-width:1.5;cursor:pointer}
+.mark text{fill:#fff;font-weight:700;font-size:12px;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+
+/* ===== マーク一覧・集計 ===== */
+.marks-list{max-height:180px;overflow-y:auto;border:1px solid var(--line2);border-radius:6px}
+.marks-list table{width:100%;border-collapse:collapse;font-size:12px}
+.marks-list th,.marks-list td{border-bottom:1px solid var(--line2);padding:4px 8px;text-align:left}
+.marks-list th{background:#EEF1F6;position:sticky;top:0}
+.marks-list .del{color:var(--red);cursor:pointer;font-weight:700;border:none;background:none;font-size:13px}
+.empty{color:#999;font-size:12px;padding:10px;text-align:center}
+.calc{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.calc .box{flex:1;min-width:140px;border:1.5px solid var(--line);border-radius:6px;padding:8px 12px;background:#FAFAF7}
+.calc .box .k{font-size:11px;color:#5B6470}
+.calc .box .v{font-size:22px;font-weight:700}
+.calc .box.warn .v{color:var(--red)}
+.calc-note{font-size:11px;color:#777;margin-top:6px}
+
+/* ===== フッター操作 ===== */
+.actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:6px 0 30px}
+.btn{border:none;border-radius:7px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.05em}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn:hover{filter:brightness(1.08)}
+
+/* ===== 印刷（PDF保存）：出品票1枚に収まるよう圧縮レイアウト ===== */
+.print-only{display:none}
+@media print{
+  @page{size:A4;margin:6mm}
+  html,body{background:#fff;font-size:9px;line-height:1.25}
+  header .date{display:block}
+  header{padding:3px 8px}
+  header h1{font-size:13px}
+  header .sub{font-size:8px}
+  .no-print{display:none !important}
+  .print-only{display:block}
+  .wrap{padding:0;max-width:none}
+
+  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:6px;align-items:start}
+
+  .card{break-inside:avoid;margin-bottom:5px;border-radius:0;border:1px solid #888}
+  .card h2{padding:2px 6px;font-size:9.5px;background:#333 !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card h2 .tag{display:none}
+  .card .body{padding:4px 6px}
+
+  .frow{gap:4px;margin-bottom:4px}
+  .f label{font-size:7.5px;color:#555;margin-bottom:0}
+  .f input,.f select,.f textarea{
+    border:none;border-bottom:1px solid #999;border-radius:0;padding:0 1px;font-size:9px;height:14px;min-height:0}
+  textarea{resize:none;overflow:hidden;height:auto !important;min-height:14px}
+
+  .inline{gap:4px}
+  .chk{border:none;padding:0 3px;font-size:8px;gap:2px}
+  .chk:not(:has(input:checked)){opacity:.3}
+  .chk input{width:9px;height:9px}
+
+  .score-row,.int-row{gap:3px}
+  .score-btn,.int-btn{display:none;padding:2px 3px;min-width:0;font-size:11px;border-width:1px}
+  .score-btn small{display:none}
+  .score-btn.on,.int-btn.on{display:inline-block;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#333 !important;color:#fff !important;border-color:#333 !important}
+
+  details.ref{display:none}
+
+  .pal-group{display:none}
+  .mode-hint{display:none}
+
+  .diagram-box{border:1px solid #888}
+  svg#car{max-height:190px;width:auto;margin:0 auto;display:block}
+
+  .marks-list{max-height:none;overflow:visible;border:1px solid #999}
+  .marks-list table{font-size:8px}
+  .marks-list th,.marks-list td{padding:1px 4px}
+  .mark circle{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .calc{gap:5px;margin-top:5px}
+  .calc .box{padding:3px 6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .calc .box .k{font-size:7.5px}
+  .calc .box .v{font-size:13px}
+  .calc-note{font-size:7px;margin-top:3px}
+
+  #notes,#inspector{font-size:9px;padding:3px 5px;min-height:30px}
+  .wrap > .card:nth-last-child(2),
+  .wrap > .card:nth-last-child(3){
+    display:inline-block;width:calc(50% - 4px);vertical-align:top;box-sizing:border-box;margin-right:6px
+  }
+  .wrap > .card:nth-last-child(2){margin-right:0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>J-AUTO 車両査定システム</h1>
+  <span class="sub">ASワンプラ検査基準準拠｜出品票・検査記録</span>
+  <span class="date" id="today">2026年7月5日</span>
+</header>
+
+<div class="wrap">
+<div class="grid">
+
+<!-- ============ 左カラム：車両情報 ============ -->
+<div>
+
+  <div class="card">
+    <h2>車両情報 <span class="tag">出品票</span></h2>
+    <div class="body">
+      <div class="frow">
+        <div class="f c2"><label>初年度登録（年）</label><input type="text" id="regY" placeholder="R4 / 2022"></div>
+        <div class="f c1"><label>月</label><input type="text" id="regM" placeholder="6"></div>
+        <div class="f c5"><label>車名</label><input type="text" id="carName" placeholder="スズキ スイフト"></div>
+        <div class="f c4"><label>グレード</label><input type="text" id="grade" placeholder="RS"></div>
+      </div>
+      <div class="frow">
+        <div class="f c3"><label>型式</label><input type="text" id="katashiki" placeholder="DBA-ZC72S"></div>
+        <div class="f c2"><label>排気量（cc）</label><input type="text" id="cc" placeholder="1200"></div>
+        <div class="f c1"><label>ドア数</label><input type="text" id="doors" placeholder="5"></div>
+        <div class="f c2"><label>駆動</label><select id="drive"><option value=""></option><option>2WD</option><option>4WD</option><option>その他</option></select></div>
+        <div class="f c2"><label>燃料</label><select id="fuel"><option value=""></option><option>ガソリン</option><option>軽油</option><option>ハイブリッド</option><option>EV</option><option>その他</option></select></div>
+        <div class="f c2"><label>シフト</label><select id="shift"><option value=""></option><option>AT</option><option>CVT</option><option>MT5</option><option>MT6</option><option>その他</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="f c2"><label>車検（年）</label><input type="text" id="shakenY" placeholder="R8"></div>
+        <div class="f c1"><label>月</label><input type="text" id="shakenM" placeholder="6"></div>
+        <div class="f c3"><label>車歴（未記入は自家用）</label><input type="text" id="sharek" placeholder="レンタ・営業等あれば"></div>
+        <div class="f c3"><label>登録No.</label><input type="text" id="regNo" placeholder="秋田 500 あ 12-34"></div>
+        <div class="f c3"><label>車台No.</label><input type="text" id="frameNo" placeholder="ZC72S-123456"></div>
+      </div>
+      <div class="frow">
+        <div class="f c3"><label>走行距離（km）</label><input type="text" id="odo" placeholder="45,300"></div>
+        <div class="f c5"><label>走行距離区分</label>
+          <div class="inline">
+            <label class="chk"><input type="radio" name="odoFlag" value="" checked="">実走行</label>
+            <label class="chk"><input type="radio" name="odoFlag" value="＄">＄ 交換</label>
+            <label class="chk"><input type="radio" name="odoFlag" value="＊">＊ 改ざん</label>
+            <label class="chk"><input type="radio" name="odoFlag" value="＃">＃ 不明</label>
+            <label class="chk"><input type="checkbox" id="odoMile">マイル</label>
+          </div>
+        </div>
+        <div class="f c4"><label>リサイクル預託金（円）※A/B券のみ</label><input type="text" id="recycle" placeholder="10,850"></div>
+      </div>
+      <div class="frow">
+        <div class="f c4"><label>外装色（カラーNo.まで）</label><input type="text" id="extColor" placeholder="スーパーブラックP ZMV"></div>
+        <div class="f c3"><label>色替・全塗装履歴</label><input type="text" id="colorChange" placeholder="なし / 色替(元色:白)"></div>
+        <div class="f c2"><label>内装色</label><input type="text" id="intColor" placeholder="黒"></div>
+        <div class="f c1"><label>定員</label><input type="text" id="capacity" placeholder="5"></div>
+        <div class="f c2"><label>積載量</label><input type="text" id="loadCap" placeholder="-"></div>
+      </div>
+      <div class="frow">
+        <div class="f c12"><label>セールスポイント（120文字目安・社外品はメーカー/型番、名称は略さない）</label>
+          <textarea id="sales" rows="2" maxlength="200" placeholder="社外ナビ(パナソニック ストラーダ CN-F1D)・バックモニター・LEDヘッドライト・両側パワースライドドア 等"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>純正装備品 <span class="tag">○をつけてよい条件はマニュアル参照</span></h2>
+    <div class="body">
+      <div class="inline" id="equipBox">
+        <label class="chk"><input type="checkbox" value="PS">PS</label>
+        <label class="chk"><input type="checkbox" value="PW">PW</label>
+        <label class="chk"><input type="checkbox" value="純正TV">純正TV</label>
+        <label class="chk"><input type="checkbox" value="純正ナビ">純正ナビ</label>
+        <label class="chk"><input type="checkbox" value="革シート">革シート</label>
+        <label class="chk"><input type="checkbox" value="SR">SR</label>
+        <label class="chk"><input type="checkbox" value="純正AW">純正AW</label>
+        <label class="chk"><input type="checkbox" value="エアB">エアB</label>
+        <label class="chk"><input type="checkbox" value="ABS">ABS</label>
+      </div>
+      <div class="frow" style="margin-top:10px">
+        <div class="f c3"><label>TV種類（社外含む）</label><select id="tvType"><option value=""></option><option>フルセグ</option><option>ワンセグ</option><option>アナログ</option></select></div>
+        <div class="f c3"><label>ナビ種類（社外含む）</label><select id="naviType"><option value=""></option><option>HDD</option><option>DVD</option><option>SD</option><option>メモリ</option><option>ディスプレイオーディオ</option></select></div>
+        <div class="f c2" style="justify-content:flex-end"><label class="chk"><input type="checkbox" id="dvdPlay">DVD再生可</label></div>
+        <div class="f c4"><label>後日発送品（車載分を引いた本数）</label><input type="text" id="laterItems" placeholder="スペアキー1本 後日送り"></div>
+      </div>
+      <div class="frow">
+        <div class="f c6"><label>新車保証書</label><select id="hosho"><option value=""></option><option>あり（保証継承ページあり）</option><option>あり（継承可能）</option><option>なし</option></select></div>
+        <div class="f c6"><label>取説・記録簿・整備手帳</label><input type="text" id="docs" placeholder="取説あり・記録簿あり(直近車検分)・整備手帳あり"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>評価点・内装評価</h2>
+    <div class="body">
+      <div class="f" style="margin-bottom:12px"><label>外装評価点（クリックで選択）</label>
+        <div class="score-row" id="scoreRow">
+          <button type="button" class="score-btn" data-v="S">S<small>無傷無補修</small></button>
+          <button type="button" class="score-btn" data-v="6">6<small>3年3万km内</small></button>
+          <button type="button" class="score-btn" data-v="5">5<small>5年5万km内</small></button>
+          <button type="button" class="score-btn" data-v="4.5">4.5<small>10pt以内</small></button>
+          <button type="button" class="score-btn" data-v="4">4<small>15pt以内</small></button>
+          <button type="button" class="score-btn" data-v="3.5">3.5<small>25pt以内</small></button>
+          <button type="button" class="score-btn" data-v="3">3<small>30pt以内</small></button>
+          <button type="button" class="score-btn" data-v="2">2<small>粗悪車</small></button>
+          <button type="button" class="score-btn" data-v="1">1<small>改造車</small></button>
+          <button type="button" class="score-btn" data-v="R">R<small>修復歴車</small></button>
+          <button type="button" class="score-btn" data-v="0">0<small>事故現状車</small></button>
+        </div>
+      </div>
+      <div class="f"><label>内装評価点</label>
+        <div class="int-row" id="intRow">
+          <button type="button" class="int-btn" data-v="A">A</button>
+          <button type="button" class="int-btn" data-v="B">B</button>
+          <button type="button" class="int-btn" data-v="C">C</button>
+        </div>
+      </div>
+
+      <details class="ref">
+        <summary>▶ 評価点基準表を確認する（ASワンプラ検査基準）</summary>
+        <div class="rbody">
+          <table class="ref-t">
+            <tbody><tr><th>点</th><th>外装・内部ダメージ</th><th>登録・走行条件</th><th>内装条件・上限・補足</th></tr>
+            <tr><td><b>S</b></td><td>無傷、無補修</td><td>登録1年未満・走行1千km以内</td><td>内装Aまで</td></tr>
+            <tr><td><b>6</b></td><td>バンパーA1が1カ所程度</td><td>登録3年以内・走行3万km以内</td><td>内装Aまで</td></tr>
+            <tr><td><b>5</b></td><td>交換パネルなし・バンパーA2が1カ所程度</td><td>登録5年以内・走行5万km以内</td><td>内装Bまで・ガラス小飛石まで</td></tr>
+            <tr><td><b>4.5</b></td><td>レベル2が2パネルまで・ボルト交換パネル1カ所まで・合計10pt以内</td><td>走行10万km以内</td><td>内装Bまで・メーター交換($)上限・ガラスヒビ上限</td></tr>
+            <tr><td><b>4</b></td><td>レベル3が1パネル・レベル2が3パネルまで・合計15pt以内</td><td>走行15万km以内</td><td>ルーフBP跡上限・色替え上限・ガラス割れ上限</td></tr>
+            <tr><td><b>3.5</b></td><td>A2が5パネル、U2/B2が3〜4、U3/B3が2、×が1パネルまで・合計25pt以内・クォーター片側交換</td><td></td><td>メーター改ざん(＊)走行不明(＃)上限・バックパネル修正上限</td></tr>
+            <tr><td><b>3</b></td><td>3.5超・合計30pt以内・クォーター両側/ステップアウター/バックパネル交換</td><td></td><td>雹害(軽微)上限・下回り腐食まで(穴不可)</td></tr>
+            <tr><td><b>2</b></td><td>粗悪車（冠水・消火器噴霧跡・災害車）</td><td></td><td>腐食大・腐食穴多し等</td></tr>
+            <tr><td><b>1</b></td><td>改造車（規格外パーツで継続検査不可・重要骨格加工）</td><td></td><td>改造部位を記載</td></tr>
+            <tr><td><b>R</b></td><td>修復歴車（骨格に達する損傷・加修・修正機跡）</td><td></td><td>修復箇所を検査員記入欄へ</td></tr>
+            <tr><td><b>0</b></td><td>事故現状車</td><td>陸送会社が運搬可能なこと</td><td>展開図に事故範囲○印・エアバッグ状況を記載</td></tr>
+          </tbody></table>
+          <p style="font-size:11px;color:#777;margin-top:6px">※評価点は基準内容をすべて満たす必要があります。ポイント＝A/U/B/S各記号の数値＋W3の合計（W1・W2は加算しない）。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ 右カラム：展開図・記号 ============ -->
+<div>
+
+  <div class="card">
+    <h2>検査記号パレット <span class="tag">選択→展開図をクリックで記入</span></h2>
+    <div class="body">
+      <div class="mode-hint no-print" id="modeHint">記号を選んで展開図上をクリック（タップ）してください。<b>打った記号をクリックすると削除</b>できます。</div>
+
+      <div class="pal-group"><div class="gname">キズ</div>
+        <div class="pal">
+          <button type="button" class="sym g-kizu" data-s="A1"><span class="tip">約10cm程度の傷（1pt）</span>A1</button>
+          <button type="button" class="sym g-kizu" data-s="A2"><span class="tip">約30cm程度の傷（2pt）</span>A2</button>
+          <button type="button" class="sym g-kizu" data-s="A3"><span class="tip">A2を超える傷（3pt）</span>A3</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">ヘコミ</div>
+        <div class="pal">
+          <button type="button" class="sym g-heko" data-s="U1"><span class="tip">エクボ〜ゴルフボール程度（1pt）</span>U1</button>
+          <button type="button" class="sym g-heko" data-s="U2"><span class="tip">ベースボール程度まで（2pt）</span>U2</button>
+          <button type="button" class="sym g-heko" data-s="U3"><span class="tip">加修で直る程度の大ヘコミ（3pt）</span>U3</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">キズを伴うヘコミ</div>
+        <div class="pal">
+          <button type="button" class="sym g-b" data-s="B1"><span class="tip">ゴルフボール程度までの傷付きヘコミ（1pt）</span>B1</button>
+          <button type="button" class="sym g-b" data-s="B2"><span class="tip">ベースボール程度まで（2pt）</span>B2</button>
+          <button type="button" class="sym g-b" data-s="B3"><span class="tip">加修で直る程度（3pt）</span>B3</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">補修跡塗装波（W1・W2はpt加算なし）</div>
+        <div class="pal">
+          <button type="button" class="sym g-w" data-s="W1"><span class="tip">良質な仕上げ（0pt）</span>W1</button>
+          <button type="button" class="sym g-w" data-s="W2"><span class="tip">通常の仕上げ（0pt）</span>W2</button>
+          <button type="button" class="sym g-w" data-s="W3"><span class="tip">再補修を要す（3pt加算）</span>W3</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">さび</div>
+        <div class="pal">
+          <button type="button" class="sym g-sabi" data-s="S1"><span class="tip">小錆数箇所まで（1pt）</span>S1</button>
+          <button type="button" class="sym g-sabi" data-s="S2"><span class="tip">ゴルフボール大まで（2pt）</span>S2</button>
+          <button type="button" class="sym g-sabi" data-s="S3"><span class="tip">ベースボール大まで（3pt）</span>S3</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">その他表現</div>
+        <div class="pal">
+          <button type="button" class="sym g-other" data-s="×"><span class="tip">交換要す（1パネル扱い）</span>×</button>
+          <button type="button" class="sym g-other" data-s="××"><span class="tip">交換済</span>××</button>
+          <button type="button" class="sym g-other" data-s="ワレ"><span class="tip">割れ</span>ワレ</button>
+          <button type="button" class="sym g-other" data-s="色アセ"><span class="tip">色褪せ</span>色アセ</button>
+          <button type="button" class="sym g-other" data-s="Pアト"><span class="tip">ペイント跡</span>Pアト</button>
+          <button type="button" class="sym g-other" data-s="C"><span class="tip">腐食</span>C</button>
+        </div>
+      </div>
+      <div class="pal-group"><div class="gname">ガラス</div>
+        <div class="pal">
+          <button type="button" class="sym g-glass" data-s="リペア跡"><span class="tip">良好な仕上げのガラスリペア跡（上限4.5点）</span>リペア跡</button>
+          <button type="button" class="sym g-glass" data-s="トビ石"><span class="tip">ガラス点傷</span>トビ石</button>
+          <button type="button" class="sym g-glass" data-s="ヒビ"><span class="tip">約1cm程度までのガラスヒビ</span>ヒビ</button>
+          <button type="button" class="sym g-glass" data-s="Gワレ"><span class="tip">ヒビを超えるガラスの割れ</span>Gワレ</button>
+          <button type="button" class="sym g-glass" data-s="×要す"><span class="tip">リペア不可・外板に割れがある場合（上限4点）</span>×要す</button>
+        </div>
+      </div>
+      <div class="pal-group no-print"><div class="gname">操作</div>
+        <div class="pal">
+          <button type="button" class="sym erase" data-s="__erase">🗑 削除モード</button>
+          <button type="button" class="sym erase" id="clearAll">全消去</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>展開図 <span class="tag">クリックで記号を記入</span></h2>
+    <div class="body">
+      <div class="diagram-box">
+        <svg id="car" viewBox="0 0 520 620" xmlns="http://www.w3.org/2000/svg">
+          <!-- タイヤ -->
+          <circle class="panel" data-p="左前ホイール" cx="70" cy="150" r="34"></circle>
+          <circle class="panel" data-p="右前ホイール" cx="450" cy="150" r="34"></circle>
+          <circle class="panel" data-p="左後ホイール" cx="70" cy="440" r="34"></circle>
+          <circle class="panel" data-p="右後ホイール" cx="450" cy="440" r="34"></circle>
+          <circle class="panel" data-p="スペアタイヤ" cx="463" cy="565" r="30"></circle>
+          <text class="panel-label" x="463" y="606">スペア</text>
+
+          <!-- フロントバンパー -->
+          <rect class="panel" data-p="フロントバンパー" x="150" y="14" width="220" height="30" rx="12"></rect>
+          <text class="panel-label" x="260" y="33">Fバンパー</text>
+          <!-- ボンネット -->
+          <path class="panel" data-p="ボンネット" d="M165 52 L355 52 L345 130 L175 130 Z"></path>
+          <text class="panel-label" x="260" y="95">ボンネット</text>
+          <!-- フロントガラス -->
+          <path class="panel" data-p="フロントガラス" d="M178 138 L342 138 L330 190 L190 190 Z"></path>
+          <text class="panel-label" x="260" y="168">Fガラス</text>
+          <!-- ルーフ -->
+          <rect class="panel" data-p="ルーフ" x="192" y="198" width="136" height="180" rx="8"></rect>
+          <text class="panel-label" x="260" y="290">ルーフ</text>
+          <!-- リヤガラス -->
+          <path class="panel" data-p="リヤガラス" d="M190 386 L330 386 L342 434 L178 434 Z"></path>
+          <text class="panel-label" x="260" y="414">Rガラス</text>
+          <!-- トランク -->
+          <path class="panel" data-p="トランク/バックドア" d="M175 442 L345 442 L355 512 L165 512 Z"></path>
+          <text class="panel-label" x="260" y="482">トランク</text>
+          <!-- リヤバンパー -->
+          <rect class="panel" data-p="リヤバンパー" x="150" y="522" width="220" height="30" rx="12"></rect>
+          <text class="panel-label" x="260" y="541">Rバンパー</text>
+
+          <!-- 左側面（展開） -->
+          <path class="panel" data-p="左フロントフェンダー" d="M112 60 L158 60 L162 195 L112 195 Z"></path>
+          <text class="panel-label" x="137" y="128" transform="rotate(-90 137 128)">左Fフェンダー</text>
+          <rect class="panel" data-p="左フロントドア" x="112" y="203" width="52" height="105"></rect>
+          <text class="panel-label" x="138" y="256" transform="rotate(-90 138 256)">左Fドア</text>
+          <rect class="panel" data-p="左リヤドア" x="112" y="316" width="52" height="100"></rect>
+          <text class="panel-label" x="138" y="366" transform="rotate(-90 138 366)">左Rドア</text>
+          <path class="panel" data-p="左クォーター" d="M112 424 L164 424 L158 555 L112 555 Z"></path>
+          <text class="panel-label" x="136" y="490" transform="rotate(-90 136 490)">左クォーター</text>
+          <rect class="panel" data-p="左サイドシル" x="176" y="203" width="10" height="352"></rect>
+
+          <!-- 右側面（展開） -->
+          <path class="panel" data-p="右フロントフェンダー" d="M362 60 L408 60 L408 195 L358 195 Z"></path>
+          <text class="panel-label" x="385" y="128" transform="rotate(90 385 128)">右Fフェンダー</text>
+          <rect class="panel" data-p="右フロントドア" x="356" y="203" width="52" height="105"></rect>
+          <text class="panel-label" x="382" y="256" transform="rotate(90 382 256)">右Fドア</text>
+          <rect class="panel" data-p="右リヤドア" x="356" y="316" width="52" height="100"></rect>
+          <text class="panel-label" x="382" y="366" transform="rotate(90 382 366)">右Rドア</text>
+          <path class="panel" data-p="右クォーター" d="M356 424 L408 424 L408 555 L362 555 Z"></path>
+          <text class="panel-label" x="384" y="490" transform="rotate(90 384 490)">右クォーター</text>
+          <rect class="panel" data-p="右サイドシル" x="334" y="203" width="10" height="352"></rect>
+
+          <g id="marksLayer"></g>
+        </svg>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="gname" style="font-size:11px;color:#5B6470;margin-bottom:4px">記入済み記号一覧</div>
+        <div class="marks-list">
+          <table id="marksTable">
+            <thead><tr><th>記号</th><th>部位</th><th>pt</th><th class="no-print"></th></tr></thead>
+            <tbody id="marksBody"><tr><td colspan="4" class="empty">まだ記号が記入されていません</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="calc">
+        <div class="box"><div class="k">合計ポイント（W1/W2除外・W3加算）</div><div class="v" id="ptTotal">0 pt</div></div>
+        <div class="box"><div class="k">ポイントによる評価点上限</div><div class="v" id="ptLimit">—</div></div>
+      </div>
+      <div class="calc-note">上限目安：10pt以内→4.5／15pt以内→4／25pt以内→3.5／30pt以内→3。レベル数・パネル数・内装等の他条件もすべて満たす必要があります。</div>
+      <div class="calc-note" id="limitWarn" style="color:var(--red);font-weight:700;display:none">⚠ 選択中の評価点がポイント上限を超えています。評価点を見直してください。</div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /grid -->
+
+<!-- ============ 下段：記入欄 ============ -->
+<div class="card">
+  <h2>注意事項・不具合箇所 <span class="tag">欠品・社外品・機関/機構/装備の不具合を必ず記載</span></h2>
+  <div class="body">
+    <textarea id="notes" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）エンジンオイルにじみあり／エアコン効き弱い／社外マフラー装着／リモコンキー欠品　※「外装小A・小B」「内外装仕上げ済み」「即納車可能」「禁煙車」等のあいまいな記載はクレーム対象になるため禁止"></textarea>
+  </div>
+</div>
+
+<div class="card">
+  <h2>検査員記入欄 <span class="tag">修復歴「有」の場合は修復箇所・交換箇所を記入</span></h2>
+  <div class="body">
+    <div class="frow">
+      <div class="f c8"><label>記入内容（展開図で表現できないもの・オイル漏れ・下廻りの状態など）</label>
+        <textarea id="inspector" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）右クォーター交換済（修復歴該当）／下廻り腐食小・穴なし／ドアミラーキズ／工具・ジャッキあり"></textarea>
+      </div>
+      <div class="f c2"><label>査定担当</label><input type="text" id="staff" placeholder="クロサワ"></div>
+      <div class="f c2"><label>査定日</label><input type="text" id="checkDate"></div>
+    </div>
+  </div>
+</div>
+
+<div class="actions no-print">
+  <button type="button" class="btn ghost" id="resetBtn">入力をリセット</button>
+  <button type="button" class="btn primary" id="pdfBtn">🖨 PDFで保存（印刷）</button>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+(function(){
+  // ===== 日付 =====
+  const now = new Date();
+  const dateStr = now.getFullYear() + "年" + (now.getMonth()+1) + "月" + now.getDate() + "日";
+  document.getElementById("today").textContent = dateStr;
+  document.getElementById("checkDate").value = dateStr;
+
+  // ===== 記号定義 =====
+  const SYM = {
+    "A1":{pt:1,color:"var(--red)"},   "A2":{pt:2,color:"var(--red)"},   "A3":{pt:3,color:"var(--red)"},
+    "U1":{pt:1,color:"var(--amber)"}, "U2":{pt:2,color:"var(--amber)"}, "U3":{pt:3,color:"var(--amber)"},
+    "B1":{pt:1,color:"var(--purple)"},"B2":{pt:2,color:"var(--purple)"},"B3":{pt:3,color:"var(--purple)"},
+    "W1":{pt:0,color:"var(--blue)"},  "W2":{pt:0,color:"var(--blue)"},  "W3":{pt:3,color:"var(--blue)"},
+    "S1":{pt:1,color:"var(--brown)"}, "S2":{pt:2,color:"var(--brown)"}, "S3":{pt:3,color:"var(--brown)"},
+    "×":{pt:1,color:"var(--gray)"},  "××":{pt:0,color:"var(--gray)"}, "ワレ":{pt:0,color:"var(--gray)"},
+    "色アセ":{pt:0,color:"var(--gray)"},"Pアト":{pt:0,color:"var(--gray)"},"C":{pt:0,color:"var(--gray)"},
+    "リペア跡":{pt:0,color:"var(--teal)"},"トビ石":{pt:0,color:"var(--teal)"},"ヒビ":{pt:0,color:"var(--teal)"},
+    "Gワレ":{pt:0,color:"var(--teal)"},"×要す":{pt:0,color:"var(--teal)"}
+  };
+
+  let currentSym = null;      // 選択中の記号（"__erase"=削除モード）
+  let marks = [];             // {id, sym, x, y, panel}
+  let seq = 0;
+
+  const svg = document.getElementById("car");
+  const layer = document.getElementById("marksLayer");
+  const hint = document.getElementById("modeHint");
+
+  // ===== パレット選択 =====
+  document.querySelectorAll(".sym[data-s]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const s = btn.dataset.s;
+      if(currentSym === s){ currentSym = null; btn.classList.remove("on"); updateHint(); return; }
+      document.querySelectorAll(".sym").forEach(b=>b.classList.remove("on"));
+      btn.classList.add("on");
+      currentSym = s;
+      updateHint();
+    });
+  });
+  function updateHint(){
+    if(currentSym === "__erase"){ hint.innerHTML = "<b>削除モード</b>：展開図上の記号をクリックすると消去します。"; }
+    else if(currentSym){ hint.innerHTML = "選択中：<b>" + currentSym + "</b>　展開図上のキズ・ヘコミ位置をクリックしてください。"; }
+    else { hint.innerHTML = "記号を選んで展開図上をクリック（タップ）してください。<b>打った記号をクリックすると削除</b>できます。"; }
+  }
+
+  // ===== SVG座標変換 =====
+  function svgPoint(evt){
+    const pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // ===== 展開図クリック =====
+  svg.addEventListener("click", (evt)=>{
+    // 既存マークのクリック（削除）
+    const markEl = evt.target.closest(".mark");
+    if(markEl){
+      const id = Number(markEl.dataset.id);
+      marks = marks.filter(m=>m.id !== id);
+      render();
+      return;
+    }
+    if(!currentSym || currentSym === "__erase") return;
+    const p = svgPoint(evt);
+    if(p.x < 0 || p.y < 0 || p.x > 520 || p.y > 620) return;
+    const panelEl = evt.target.closest(".panel");
+    const panel = panelEl ? panelEl.dataset.p : "その他";
+    marks.push({id:++seq, sym:currentSym, x:p.x, y:p.y, panel});
+    render();
+  });
+
+  // ===== 全消去 =====
+  document.getElementById("clearAll").addEventListener("click", ()=>{
+    if(marks.length && confirm("展開図の記号をすべて消去しますか？")){ marks = []; render(); }
+  });
+
+  // ===== 描画・集計 =====
+  const marksBody = document.getElementById("marksBody");
+  function render(){
+    // SVGマーク
+    layer.innerHTML = "";
+    marks.forEach(m=>{
+      const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+      g.setAttribute("class","mark");
+      g.dataset.id = m.id;
+      const long = m.sym.length > 2;
+      const r = long ? 20 : 14;
+      const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
+      c.setAttribute("cx",m.x); c.setAttribute("cy",m.y); c.setAttribute("r",r);
+      c.style.fill = SYM[m.sym] ? SYM[m.sym].color : "var(--gray)";
+      const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+      t.setAttribute("x",m.x); t.setAttribute("y",m.y);
+      if(long) t.setAttribute("font-size","9");
+      t.textContent = m.sym;
+      g.appendChild(c); g.appendChild(t);
+      layer.appendChild(g);
+    });
+
+    // 一覧
+    if(!marks.length){
+      marksBody.innerHTML = '<tr><td colspan="4" class="empty">まだ記号が記入されていません</td></tr>';
+    } else {
+      marksBody.innerHTML = marks.map(m=>{
+        const pt = SYM[m.sym] ? SYM[m.sym].pt : 0;
+        return `<tr><td><b>${m.sym}</b></td><td>${m.panel}</td><td>${pt||"—"}</td>
+          <td class="no-print"><button class="del" data-id="${m.id}" title="削除">✕</button></td></tr>`;
+      }).join("");
+      marksBody.querySelectorAll(".del").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          marks = marks.filter(m=>m.id !== Number(b.dataset.id));
+          render();
+        });
+      });
+    }
+
+    // ポイント集計
+    const total = marks.reduce((s,m)=> s + (SYM[m.sym] ? SYM[m.sym].pt : 0), 0);
+    document.getElementById("ptTotal").textContent = total + " pt";
+    let limit, limitNum;
+    if(total === 0){ limit = "—"; limitNum = 99; }
+    else if(total <= 10){ limit = "4.5 点"; limitNum = 4.5; }
+    else if(total <= 15){ limit = "4 点"; limitNum = 4; }
+    else if(total <= 25){ limit = "3.5 点"; limitNum = 3.5; }
+    else if(total <= 30){ limit = "3 点"; limitNum = 3; }
+    else { limit = "3点未満（2相当等）"; limitNum = 2; }
+    document.getElementById("ptLimit").textContent = limit;
+
+    // 警告：選択中評価点が上限超過
+    const warn = document.getElementById("limitWarn");
+    const sel = document.querySelector(".score-btn.on");
+    const selVal = sel ? sel.dataset.v : null;
+    const numMap = {"S":7,"6":6,"5":5,"4.5":4.5,"4":4,"3.5":3.5,"3":3,"2":2,"1":1,"R":0,"0":0};
+    if(sel && total > 0 && numMap[selVal] > limitNum && !["R","0","1","2"].includes(selVal)){
+      warn.style.display = "block";
+      document.getElementById("ptLimit").parentElement.classList.add("warn");
+    } else {
+      warn.style.display = "none";
+      document.getElementById("ptLimit").parentElement.classList.remove("warn");
+    }
+  }
+
+  // ===== 評価点・内装点ボタン =====
+  document.querySelectorAll("#scoreRow .score-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const was = b.classList.contains("on");
+      document.querySelectorAll("#scoreRow .score-btn").forEach(x=>x.classList.remove("on"));
+      if(!was) b.classList.add("on");
+      render();
+    });
+  });
+  document.querySelectorAll("#intRow .int-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const was = b.classList.contains("on");
+      document.querySelectorAll("#intRow .int-btn").forEach(x=>x.classList.remove("on"));
+      if(!was) b.classList.add("on");
+    });
+  });
+
+  // ===== リセット =====
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    if(!confirm("すべての入力・記号をリセットしますか？")) return;
+    document.querySelectorAll("input[type=text], textarea").forEach(el=>el.value="");
+    document.querySelectorAll("select").forEach(el=>el.selectedIndex=0);
+    document.querySelectorAll("input[type=checkbox]").forEach(el=>el.checked=false);
+    document.querySelector('input[name=odoFlag][value=""]').checked = true;
+    document.querySelectorAll(".score-btn,.int-btn").forEach(x=>x.classList.remove("on"));
+    marks = []; currentSym = null;
+    document.querySelectorAll(".sym").forEach(b=>b.classList.remove("on"));
+    document.getElementById("checkDate").value = dateStr;
+    updateHint(); render();
+  });
+
+  // ===== PDF保存（印刷） =====
+  document.getElementById("pdfBtn").addEventListener("click", ()=>{
+    // textareaの内容を印刷でも全文表示できるよう高さ調整
+    document.querySelectorAll("textarea").forEach(t=>{
+      t.style.height = "auto";
+      t.style.height = (t.scrollHeight + 4) + "px";
+    });
+    window.print();
+  });
+
+  render();
+})();
+</script>
+
+
+</body></html>
