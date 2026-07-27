@@ -697,3 +697,85 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 
 
 </body></html>
+<!-- ══════════════════════════════════════════════════════════════
+     買取契約書アプリ連携ブロック（v1）
+     ここから下は独立した追記です。既存の査定システムには一切干渉しません。
+     万一エラーが起きても try/catch で握りつぶすため、査定機能は止まりません。
+     ══════════════════════════════════════════════════════════════ -->
+<style>
+#jaToKeiyakuWrap{max-width:1100px;margin:14px auto 40px;padding:0 12px;}
+#jaToKeiyaku{display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;box-sizing:border-box;padding:15px 18px;border-radius:12px;
+  background:#16294d;color:#fff;font-size:16px;font-weight:700;text-decoration:none;
+  letter-spacing:.06em;border:2px solid #b3903f;
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;}
+#jaToKeiyaku:active{opacity:.85;}
+#jaToKeiyakuWrap .ja-note{margin-top:7px;font-size:12px;color:#666;text-align:center;line-height:1.6;
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;}
+@media print{#jaToKeiyakuWrap{display:none !important;}}
+</style>
+<div id="jaToKeiyakuWrap">
+  <a id="jaToKeiyaku" href="https://jautokurosawa0501-lab.github.io/J-auto-keiyakusho/"
+     target="_blank" rel="noopener">📄 この内容で買取契約書をつくる</a>
+  <div class="ja-note">車両情報を引き継いで契約書アプリを別タブで開きます。<br>この査定内容は消えません。</div>
+</div>
+<script>
+(function(){
+  "use strict";
+  // 契約書アプリのURL（変更するときはここだけ直す）
+  var KEIYAKU_URL = "https://jautokurosawa0501-lab.github.io/J-auto-keiyakusho/";
+  try{
+    var link = document.getElementById("jaToKeiyaku");
+    if(!link) return;
+
+    function val(id){
+      var el = document.getElementById(id);
+      return el && el.value ? String(el.value).trim() : "";
+    }
+    // 「R4」＋「6」→「R4年6月」の形に組み立てる
+    function ym(y, m){
+      var Y = val(y), M = val(m);
+      if(!Y && !M) return "";
+      if(Y && M) return Y + (/[年]$/.test(Y) ? "" : "年") + M + "月";
+      return Y || (M + "月");
+    }
+    // 「スズキ スイフト」→ メーカーと車名に分ける
+    function splitCar(){
+      var t = val("carName").replace(/\u3000/g, " ").trim();
+      if(!t) return {maker:"", car:""};
+      var i = t.indexOf(" ");
+      if(i < 0) return {maker:"", car:t};
+      return {maker: t.slice(0, i), car: t.slice(i + 1).trim()};
+    }
+
+    link.addEventListener("click", function(){
+      try{
+        var c = splitCar();
+        var p = {
+          maker:   c.maker,
+          car:     c.car,
+          grade:   val("grade"),
+          type:    val("katashiki"),
+          cc:      val("cc"),
+          first:   ym("regY", "regM"),
+          shaken:  ym("shakenY", "shakenM"),
+          km:      val("odo").replace(/[^0-9]/g, ""),
+          color:   val("extColor"),
+          regno:   val("regNo"),
+          frameno: val("frameNo"),
+          recycle: val("recycle").replace(/[^0-9]/g, ""),
+          staff:   val("staff")
+        };
+        var q = Object.keys(p)
+          .filter(function(k){ return p[k]; })
+          .map(function(k){ return k + "=" + encodeURIComponent(p[k]); })
+          .join("&");
+        link.href = KEIYAKU_URL + (q ? "?" + q : "");
+      }catch(e){
+        // 何かあってもリンクだけは開けるようにしておく
+        link.href = KEIYAKU_URL;
+      }
+    });
+  }catch(e){ /* 査定システム本体には影響させない */ }
+})();
+</script>
