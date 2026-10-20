@@ -16,6 +16,19 @@
 body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.55}
 
 /* ===== ヘッダー ===== */
+/* ===== 見出しフォント（タイトル文字だけを埋め込み・通信不要）=====
+   Montserrat ExtraBold: Copyright 2011 The Montserrat Project Authors (https://github.com/JulietaUla/Montserrat)
+   Zen Kaku Gothic New Bold: Copyright 2022 The Zen Kaku Gothic Project Authors (https://github.com/googlefonts/zen-kakugothic)
+   いずれも SIL Open Font License 1.1（https://openfontlicense.org）。使用文字のみに縮小して埋め込み。 */
+@font-face{font-family:"JAutoBrand";font-weight:800;font-style:normal;font-display:block;
+  src:url(data:font/woff2;base64,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) format("woff2")}
+@font-face{font-family:"JAutoTitle";font-weight:700;font-style:normal;font-display:block;
+  src:url(data:font/woff2;base64,d09GMgABAAAAAAiEABAAAAAADggAAAgqAAEAgwAAAAAAAAAAAAAAAAAAAAAAAAAAGYFSGyAcIAZgAIEEEQgKkACNEgE2AiQDGgsaAAQgBYNoByAXJBgaG2kLUZRwUh3Ij4TsLOZKCUZGsYT1F/n8yNkIojHa7N29mGEeomoWtyRWKVVDJBTR5o1EInNDtK1mBGuXNSIAsZuQV7BZUUwwGjwEu7CSO+/u/68yFvYrohH/aR9PXabefimFOz7wk77IXd/yLel7n063SR9vFSxg8QDVjgFslSQTDAWMAgwBymZuU0k92iFPjg8h0OyQMlSNa9cLRYB+uFPZBGKOK6sbQcwJqbwe0E9L5VJAPyNVyUEMI5AUk7zQLeaBvFm7bjYGAKxvHZmbV6EaTJ48XCNbqfqHCeuhVDTLpRVncQ5O89H1GMftBm01TkOglB4T5fcNCVgcxuklv0yXgCHpqUEhYEtsY7GPTXiCLt5cQOeudVndWR4rzs4+oLRUQHkMPSSeLH6nSwCYRkGiT/WjiCDVBTrMovuOmlecDTkfcifkgyzPYq1UUPu38sxE3eyD/wPKvq73eU9zn/KeMo9/sKtu+7l105ns9u1bEgEEfJuKGsTcDoanzgDpJQD5Xl1o+Cxp0RjS0DCBfOU0L5AW7eY2DDsMQ6hUXyqVamgYiWS6UOFPP8uChjDdLZpXt2+3QzV7IQUxQCFqQKOgAM0IFTHEIA1aAhqsDCD46oULdk9JUowfC9HhFASaAwSGZvdtVEOS0cvbdtpMEQQypdezCQnEIAowSJgBMQVb1drtIgjiFlKgOctYO3nSGV8nmHvvMlYP2In3P7/uuHzunA1qMHAJQbSv2aGaNQgRUDt1BUIU3CXj8VMEEQEGVlBUc9B75b7vzmP3kMJyc5WczR01Tp+23XltxDIb9IMvSfkTiGbtixesATyH+8q2vnLFTrxy+bJtDQoR6J+VCFHKOSJGe4P+kCSTaQYdS3ur06UvHzpkc0EfZ4ACeQ0p3Tgx+kCfVEGrXyLw4QYK9pKkP9x1z0er17PE+3WBFNSIJMUIRCmoAQqQrzp81zUHvb6AIETaK3TQfgRxwnmd365H+HkwH54juKtHjtjdJclsIaoaqg9fEBgHyaf++NIa81wxqAejYN8lJiBsZoAqbyWk92oKvTlhxgJpRRYb6NaeYJHxkO9ToCH5R0m5sniAAXHMV3H8ZZ0udNe5czMmIZ+zcfyw7TOisHj1yZMHdPHux8y2cI9en+BRB33F2husoU18i6kA+QycIFLO6/L8dj1jHtBDVg6WmiogSgNeaXkI2ONTUDRDJDdQVqCRBrKq3u/kMc+8e6OEb+NivfazZdo7TXzylcZ30yx/9lOv1Mk0zZPNU7KakJou0MLeFiz5ra6igz9lntpBD/yOkSWg4582pDS8p8IaMe3Nn30CZNBmyxoj4q4OmdELAc77yqtecoGGXTX50WeqtqG2zg/b+waHQfnbqXzJn9OvZRsXNuc13mozK+qcH5jdPZ4qt5F6c2jPnw0eStvICWYL/ru3HE4Z8wgLWosUgtGyCIt9Fthm35H0yGP095s5tJpZoYkZGD4usWu3xx72tXod4fxxStT1HY91KQWJ892CjdbMDklMN8PHmpgD9sDR/e0L2u0UfYyxv1mFPezXeD8LOV3a/bLTvdb/U5P9TNuTo0H+7Ieloe8GpYez34e3dlwdykqSPpr55Yzjmw2lR/3Efwti/+kQH95qvum1meTfCbhcer6Xl8nIWWswH+5L6sj8I7psrKKtYqws3Fi9sSdeuX+1TpEipOP950qlJZHhkVmRYc1z1EkuJpfyRgKmzo6rStjgfa5ffG4UHtL8riA0PWpkMn0a0XpyfTh2ddFlIUU29ipbear6Ojr/eMszi06LH7Z8Y7akualml33yZllK54KHyFWkWojf6CmBmwjOjiRl/p3PceMIsp2Nwe3tzk0flqJFd/+QMd3iuKoD3w9GdPEcROWaGAeJQ1RdaZ2wS1hdWh2V/u87Zry8EwakbD5PCdi0zMl0laZ+udgtGLn3wy057rPZ2buVgXP1g0e3Sh3PV+3HHaod6m3LLcFpweJE5USktdo6slJWWdpZWi4rj7RSW0VqKjWLlqMbsRuWMeux65aCjegNy6j16HUQ+pq58lvSYiWtt2vEssO8qN3Ls9dCYOQdGa6I6g/t9a5uGqcv++YFN0S0hsmFucavWo3diWKzJQlkWbOo/VOjjUbwP+Dc5Jtv424tmWnY0hQa4lnW47bYf7TtWkXRjw/hcqYR53isdAQ++BQczKcLffYlNj4Q+vIZmeAodvtFbobHinSiq2WCnmagalI2ljQOYn0jlbC7dDXImlt3htvzBGP/srI4An5yavqcMo0Vz+Wm8dhf5hVenwPoEvnZXx6Mh3XtNO7ZDuZhdQINV15LhoEWbsARA0k6BtQdWZfYwKTH1OS19Rf7So3U7cKTsDXqU0bshKo3GaAmWqI2ZSQAAuFeW6THs3LzhF9NUMoX8O3mWUsA+P6ncVVVY6mmlA+FRgkE5fF/HwD5b/V/lGr67UeC00+0gpm5EH2sBBFpItMAoj28gK10VFqST73JrvikYgp4DsCcCfMcyiTNPmWyld7KFCvCKdNgNDKu12hRVOFQaNFJqV6tOioewoT4KKxDojxQjSQhks80h5ICNaRJJS5LpabCYgpKrT1h8qAqLWkaJ9g1atXjMDWZILqGQnM+VVCErEm1mjiS96i1hHRJYoEaSX2sxpTox+pV8tOjIihf64E/Bz1kndSOTaFJlVBBQmxh8SR4HfaMS53CY/YkT9XAdink1TxmWNBJ9QDrW4lS02CppLZQQMnaDWx8zugG8N9/NCD/qavHSzQA4nW2WW6Ri8EZE8Z2LH5mQb9joBsAAAA=) format("woff2")}
+header h1{display:flex;align-items:baseline;gap:.55em;font-weight:normal}
+header h1 .brand{font-family:"JAutoBrand","Montserrat","Helvetica Neue",Arial,sans-serif;font-weight:800;letter-spacing:.05em;font-size:1.12em}
+header h1 .ttl-ja{font-family:"JAutoTitle","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;font-weight:700;letter-spacing:.12em;
+  padding-left:.55em;border-left:2px solid rgba(255,255,255,.45);line-height:1}
+
 header{background:var(--navy);color:#fff;padding:14px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 header h1{font-size:19px;letter-spacing:.06em}
 header .sub{font-size:12px;color:#AEC1E0;letter-spacing:.04em}
@@ -122,17 +135,33 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 #pdfBusy{display:none;position:fixed;inset:0;z-index:9998;background:var(--paper);
   align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--navy);letter-spacing:.08em}
 #pdfBusy.on{display:flex}
-#pdfPanel{display:none;position:fixed;inset:0;z-index:9999;background:rgba(22,35,59,.55);align-items:flex-end;justify-content:center}
-#pdfPanel.open{display:flex}
-#pdfPanel .pb{background:#fff;width:100%;max-width:560px;border-radius:14px 14px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
-#pdfPanel h3{font-size:15px;color:var(--navy);margin-bottom:8px;border-left:4px solid var(--amber);padding-left:8px}
-#pdfPanel .info{font-size:12.5px;color:#555;margin-bottom:12px;word-break:break-all}
-#pdfPanel button{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#FAFAF7;border-radius:10px;
+.bpanel{display:none;position:fixed;inset:0;z-index:9999;background:rgba(22,35,59,.55);align-items:flex-end;justify-content:center}
+.bpanel.open{display:flex}
+.bpanel .pb{background:#fff;width:100%;max-width:560px;border-radius:14px 14px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.bpanel h3{font-size:15px;color:var(--navy);margin-bottom:8px;border-left:4px solid var(--amber);padding-left:8px}
+.bpanel .info{font-size:12.5px;color:#555;margin-bottom:12px;word-break:break-all}
+.bpanel button{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#FAFAF7;border-radius:10px;
   padding:12px 14px;font-size:14px;font-family:inherit;cursor:pointer;margin-bottom:8px;color:var(--ink)}
-#pdfPanel button small{display:block;font-size:11px;color:#777;margin-top:2px}
-#pdfPanel button.main{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
-#pdfPanel button.main small{color:#AEC1E0}
+.bpanel button small{display:block;font-size:11px;color:#777;margin-top:2px}
+.bpanel button.main{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
+.bpanel button.main small{color:#AEC1E0}
 .btn:disabled{opacity:.6;cursor:wait}
+/* リサイクル料金 照会補助 */
+.rc-row{display:flex;gap:6px}
+.rc-row input{flex:1 1 auto;min-width:0}
+.rc-btn{flex:0 0 auto;border:1.5px solid var(--teal);background:#fff;color:var(--teal);border-radius:5px;padding:0 10px;
+  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.rc-btn:active{background:#E6F2F1}
+.rc-t{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
+.rc-t th{text-align:left;font-weight:normal;color:#5B6470;font-size:11.5px;padding:5px 6px;white-space:nowrap;width:7.5em}
+.rc-t td{padding:5px 6px;border-bottom:1px solid var(--line2);font-weight:700;word-break:break-all}
+.rc-t td.cp{width:1%;text-align:right;font-weight:normal;white-space:nowrap}
+.bpanel .rc-t button.cpy{display:inline-block;width:auto;margin:0;padding:5px 10px;font-size:12px;border-radius:6px;white-space:nowrap}
+.rc-warn{font-size:12px;color:var(--red);margin-bottom:8px}
+.rc-in{display:flex;gap:6px;margin:4px 0 10px}
+.rc-in input{flex:1;border:1px solid var(--line);border-radius:6px;padding:9px 10px;font-size:16px;font-family:inherit}
+.bpanel .rc-in button{display:inline-block;width:auto;margin:0;padding:9px 14px}
+.bpanel .pb{max-height:88vh;overflow-y:auto}
 
 /* ===== 車両状態表（A4縦1枚・印刷とPDFで共通）=====
    印刷時・PDF作成時に <html class="sheet"> を付けてこのレイアウトに切り替える。
@@ -152,7 +181,8 @@ html.sheet .print-only-inline{display:inline}
 html.sheet header{background:#fff;color:#000;padding:0 0 1.6mm;margin-bottom:2mm;border-bottom:2px solid #000;
   display:flex;align-items:flex-end;flex-wrap:nowrap;gap:3mm}
 html.sheet header .ttl{display:flex !important;flex-direction:column;gap:.8mm;min-width:0}
-html.sheet header h1{font-size:17px;letter-spacing:.22em}
+html.sheet header h1{font-size:19px;letter-spacing:0}
+html.sheet header h1 .ttl-ja{letter-spacing:.32em;border-left-color:#000;padding-left:.6em}
 html.sheet header .sub{font-size:7.5px;color:#444}
 html.sheet header .date{margin-left:auto;font-size:9px;color:#000;white-space:nowrap;align-self:flex-end}
 html.sheet .score-top{display:flex;gap:1.6mm;flex:0 0 auto}
@@ -241,7 +271,7 @@ html.sheet #inspCard .c2{grid-column:span 1}
 
 <header>
   <div class="ttl" style="display:contents">
-    <h1><span class="screen-only">J-AUTO 車両査定システム</span><span class="print-only-inline">J-AUTO 車両状態表</span></h1>
+    <h1><span class="brand">J-AUTO</span><span class="ttl-ja"><span class="screen-only">車両査定システム</span><span class="print-only-inline">車両状態表</span></span></h1>
     <span class="sub">ASワンプラ検査基準準拠｜出品票・検査記録</span>
   </div>
   <span class="date" id="today">2026年7月5日</span>
@@ -261,28 +291,28 @@ html.sheet #inspCard .c2{grid-column:span 1}
     <h2>車両情報 <span class="tag">出品票</span></h2>
     <div class="body">
       <div class="frow">
-        <div class="f c2"><label>初年度登録（年）</label><input type="text" id="regY" placeholder="R4 / 2022"></div>
-        <div class="f c1"><label>月</label><input type="text" id="regM" placeholder="6"></div>
-        <div class="f c5"><label>車名</label><input type="text" id="carName" placeholder="スズキ スイフト"></div>
-        <div class="f c4"><label>グレード</label><input type="text" id="grade" placeholder="RS"></div>
+        <div class="f c2"><label>初年度登録（年）</label><input type="text" id="regY"></div>
+        <div class="f c1"><label>月</label><input type="text" id="regM"></div>
+        <div class="f c5"><label>車名</label><input type="text" id="carName"></div>
+        <div class="f c4"><label>グレード</label><input type="text" id="grade"></div>
       </div>
       <div class="frow">
-        <div class="f c3"><label>型式</label><input type="text" id="katashiki" placeholder="DBA-ZC72S"></div>
-        <div class="f c2"><label>排気量（cc）</label><input type="text" id="cc" placeholder="1200"></div>
-        <div class="f c1"><label>ドア数</label><input type="text" id="doors" placeholder="5"></div>
+        <div class="f c3"><label>型式</label><input type="text" id="katashiki"></div>
+        <div class="f c2"><label>排気量（cc）</label><input type="text" id="cc"></div>
+        <div class="f c1"><label>ドア数</label><input type="text" id="doors"></div>
         <div class="f c2"><label>駆動</label><select id="drive"><option value=""></option><option>2WD</option><option>4WD</option><option>その他</option></select></div>
         <div class="f c2"><label>燃料</label><select id="fuel"><option value=""></option><option>ガソリン</option><option>軽油</option><option>ハイブリッド</option><option>EV</option><option>その他</option></select></div>
         <div class="f c2"><label>シフト</label><select id="shift"><option value=""></option><option>AT</option><option>CVT</option><option>MT5</option><option>MT6</option><option>その他</option></select></div>
       </div>
       <div class="frow">
-        <div class="f c2"><label>車検（年）</label><input type="text" id="shakenY" placeholder="R8"></div>
-        <div class="f c1"><label>月</label><input type="text" id="shakenM" placeholder="6"></div>
-        <div class="f c3"><label>車歴（未記入は自家用）</label><input type="text" id="sharek" placeholder="レンタ・営業等あれば"></div>
-        <div class="f c3"><label>登録No.</label><input type="text" id="regNo" placeholder="秋田 500 あ 12-34"></div>
-        <div class="f c3"><label>車台No.</label><input type="text" id="frameNo" placeholder="ZC72S-123456"></div>
+        <div class="f c2"><label>車検（年）</label><input type="text" id="shakenY"></div>
+        <div class="f c1"><label>月</label><input type="text" id="shakenM"></div>
+        <div class="f c3"><label>車歴（未記入は自家用）</label><input type="text" id="sharek"></div>
+        <div class="f c3"><label>登録No.</label><input type="text" id="regNo"></div>
+        <div class="f c3"><label>車台No.</label><input type="text" id="frameNo"></div>
       </div>
       <div class="frow">
-        <div class="f c3"><label>走行距離（km）</label><input type="text" id="odo" placeholder="45,300"></div>
+        <div class="f c3"><label>走行距離（km）</label><input type="text" id="odo"></div>
         <div class="f c5"><label>走行距離区分</label>
           <div class="inline">
             <label class="chk"><input type="radio" name="odoFlag" value="" checked="">実走行</label>
@@ -292,18 +322,18 @@ html.sheet #inspCard .c2{grid-column:span 1}
             <label class="chk"><input type="checkbox" id="odoMile">マイル</label>
           </div>
         </div>
-        <div class="f c4"><label>リサイクル預託金（円）※A/B券のみ</label><input type="text" id="recycle" placeholder="10,850"></div>
+        <div class="f c4"><label>リサイクル預託金（円）※A/B券のみ</label><div class="rc-row"><input type="text" id="recycle"><button type="button" class="rc-btn no-print" id="rcBtn" title="登録No.と車台No.で公式サイトを照会">照会</button></div></div>
       </div>
       <div class="frow">
-        <div class="f c4"><label>外装色（カラーNo.まで）</label><input type="text" id="extColor" placeholder="スーパーブラックP ZMV"></div>
-        <div class="f c3"><label>色替・全塗装履歴</label><input type="text" id="colorChange" placeholder="なし / 色替(元色:白)"></div>
-        <div class="f c2"><label>内装色</label><input type="text" id="intColor" placeholder="黒"></div>
-        <div class="f c1"><label>定員</label><input type="text" id="capacity" placeholder="5"></div>
-        <div class="f c2"><label>積載量</label><input type="text" id="loadCap" placeholder="-"></div>
+        <div class="f c4"><label>外装色（カラーNo.まで）</label><input type="text" id="extColor"></div>
+        <div class="f c3"><label>色替・全塗装履歴</label><input type="text" id="colorChange"></div>
+        <div class="f c2"><label>内装色</label><input type="text" id="intColor"></div>
+        <div class="f c1"><label>定員</label><input type="text" id="capacity"></div>
+        <div class="f c2"><label>積載量</label><input type="text" id="loadCap"></div>
       </div>
       <div class="frow">
         <div class="f c12"><label>セールスポイント（120文字目安・社外品はメーカー/型番、名称は略さない）</label>
-          <textarea id="sales" rows="2" maxlength="200" placeholder="社外ナビ(パナソニック ストラーダ CN-F1D)・バックモニター・LEDヘッドライト・両側パワースライドドア 等"></textarea>
+          <textarea id="sales" rows="2" maxlength="200"></textarea>
           <div class="pmirror print-only" id="salesP"></div>
         </div>
       </div>
@@ -551,7 +581,7 @@ html.sheet #inspCard .c2{grid-column:span 1}
 <div class="card" id="notesCard">
   <h2>注意事項・不具合箇所 <span class="tag">欠品・社外品・機関/機構/装備の不具合を必ず記載</span></h2>
   <div class="body">
-    <textarea id="notes" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）エンジンオイルにじみあり／エアコン効き弱い／社外マフラー装着／リモコンキー欠品　※「外装小A・小B」「内外装仕上げ済み」「即納車可能」「禁煙車」等のあいまいな記載はクレーム対象になるため禁止"></textarea>
+    <textarea id="notes" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px"></textarea>
     <div class="pmirror pbox print-only" id="notesP"></div>
   </div>
 </div>
@@ -561,10 +591,10 @@ html.sheet #inspCard .c2{grid-column:span 1}
   <div class="body">
     <div class="frow">
       <div class="f c8"><label>記入内容（展開図で表現できないもの・オイル漏れ・下廻りの状態など）</label>
-        <textarea id="inspector" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）右クォーター交換済（修復歴該当）／下廻り腐食小・穴なし／ドアミラーキズ／工具・ジャッキあり"></textarea>
+        <textarea id="inspector" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px"></textarea>
         <div class="pmirror pbox print-only" id="inspectorP"></div>
       </div>
-      <div class="f c2"><label>査定担当</label><input type="text" id="staff" placeholder="クロサワ"></div>
+      <div class="f c2"><label>査定担当</label><input type="text" id="staff"></div>
       <div class="f c2"><label>査定日</label><input type="text" id="checkDate"></div>
     </div>
   </div>
@@ -580,8 +610,21 @@ html.sheet #inspCard .c2{grid-column:span 1}
 
 </div><!-- /wrap -->
 
+<div id="rcPanel" class="bpanel no-print">
+  <div class="pb">
+    <h3>リサイクル料金を照会</h3>
+    <div class="info">公式の「自動車リサイクルシステム」で預託状況を調べます。下の内容をコピーして入力してください（利用時間 7:00〜24:00）。</div>
+    <div class="rc-warn" id="rcWarn" style="display:none"></div>
+    <table class="rc-t"><tbody id="rcBody"></tbody></table>
+    <button type="button" class="main" id="rcOpen">公式サイトで調べる<small>自動車リサイクルシステム「リサイクル料金検索」が別タブで開きます</small></button>
+    <div class="info" style="margin:6px 0 2px">調べた預託金額（合計）を入力して反映できます</div>
+    <div class="rc-in"><input type="text" id="rcAmount" inputmode="numeric"><button type="button" id="rcApply">反映</button></div>
+    <button type="button" id="rcClose">閉じる</button>
+  </div>
+</div>
+
 <div id="pdfBusy" class="no-print">PDFを作成中…</div>
-<div id="pdfPanel" class="no-print">
+<div id="pdfPanel" class="bpanel no-print">
   <div class="pb">
     <h3>PDFができました</h3>
     <div class="info" id="pdfInfo"></div>
@@ -761,6 +804,68 @@ html.sheet #inspCard .c2{grid-column:span 1}
     updateHint(); render();
   });
 
+  // ===== リサイクル料金 照会補助 =====
+  // 公式サイトの結果を自動で読み取ることはブラウザの仕組み上できないため、
+  // 照会に必要な項目を公式サイトの入力欄の形に分けて表示・コピーできるようにする。
+  const RC_URL = "https://www.jars.gr.jp/gus/exju0010.html";
+  function z2h(t){ return String(t||"").replace(/[０-９Ａ-Ｚａ-ｚ]/g, c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/[－ー―‐]/g,"-").replace(/　/g," ").trim(); }
+  function parsePlate(t){
+    t = z2h(t).replace(/\s+/g," ");
+    const m = t.match(/^([^\d\s]+?)\s*(\d{1,3})\s*([ぁ-んァ-ヶA-Za-z])\s*([\d・.\- ]+)$/);
+    if(!m) return null;
+    return {office:m[1], cls:m[2], kana:m[3], serial:m[4].replace(/[^\d]/g,"")};
+  }
+  function copyText(t, btn){
+    const done = ()=>{ const o = btn.textContent; btn.textContent = "済"; setTimeout(()=>btn.textContent = o, 1200); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(done, ()=>fallback());
+    } else fallback();
+    function fallback(){
+      const ta = document.createElement("textarea"); ta.value = t; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){} ta.remove();
+    }
+  }
+  const rcPanel = document.getElementById("rcPanel");
+  document.getElementById("rcBtn").addEventListener("click", ()=>{
+    const plateRaw = document.getElementById("regNo").value.trim();
+    const frame = z2h(document.getElementById("frameNo").value).replace(/\s/g,"").toUpperCase();
+    const cc = parseInt(z2h(document.getElementById("cc").value).replace(/[^\d]/g,""),10);
+    const pl = parsePlate(plateRaw);
+    const digits = frame.replace(/[^\d]/g,"");
+    const rows = [
+      ["車両区分", !isNaN(cc) ? (cc<=660 ? "軽自動車" : "登録自動車") : "（排気量から判定できません）"],
+      ["支局名", pl ? pl.office : ""], ["分類番号", pl ? pl.cls : ""], ["かな", pl ? pl.kana : ""], ["一連指定番号", pl ? pl.serial : ""],
+      ["車台番号", frame], ["車台番号 下4桁", digits.length>=4 ? digits.slice(-4) : ""]
+    ];
+    const warn = [];
+    if(!plateRaw) warn.push("登録No.が未入力です。");
+    else if(!pl) warn.push("登録No.を分けられませんでした（例：秋田 580 あ 12-34 の形で入力してください）。");
+    if(!frame) warn.push("車台No.が未入力です。");
+    const w = document.getElementById("rcWarn");
+    w.style.display = warn.length ? "block" : "none"; w.textContent = warn.join(" ");
+    const body = document.getElementById("rcBody"); body.innerHTML = "";
+    rows.forEach(([k,v])=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = '<th></th><td></td><td class="cp"></td>';
+      tr.children[0].textContent = k; tr.children[1].textContent = v || "—";
+      if(v && k!=="車両区分"){
+        const b = document.createElement("button"); b.type="button"; b.className="cpy"; b.textContent="コピー";
+        b.addEventListener("click", ()=>copyText(v,b)); tr.children[2].appendChild(b);
+      }
+      body.appendChild(tr);
+    });
+    document.getElementById("rcAmount").value = document.getElementById("recycle").value;
+    rcPanel.classList.add("open");
+  });
+  document.getElementById("rcOpen").addEventListener("click", ()=>window.open(RC_URL, "_blank", "noopener"));
+  document.getElementById("rcApply").addEventListener("click", ()=>{
+    const v = z2h(document.getElementById("rcAmount").value).replace(/[^\d]/g,"");
+    document.getElementById("recycle").value = v ? Number(v).toLocaleString("ja-JP") : "";
+    rcPanel.classList.remove("open");
+  });
+  document.getElementById("rcClose").addEventListener("click", ()=>rcPanel.classList.remove("open"));
+  rcPanel.addEventListener("click", e=>{ if(e.target===rcPanel) rcPanel.classList.remove("open"); });
+
   // ===== 車両状態表（A4 1枚）への切替 =====
   const PX_PER_MM = 96/25.4, PAGE_W = 200*PX_PER_MM, PAGE_H = 287*PX_PER_MM;  // A4 − 余白5mm×2
   const MAX_SCALE = 1.15;  // 内容が少ないときは最大1.15倍まで拡大して用紙を広く使う
@@ -855,7 +960,8 @@ html.sheet #inspCard .c2{grid-column:span 1}
     svgEl.setAttribute("width", r.width); svgEl.setAttribute("height", r.height);
   }
   function buildPdf(){
-    return loadPdfLibs().then(()=>{
+    const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    return Promise.all([loadPdfLibs(), fontsReady]).then(()=>{
       const busy = document.getElementById("pdfBusy");
       busy.classList.add("on");
       const sx = window.scrollX, sy = window.scrollY;
