@@ -139,11 +139,11 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
    内容が多いときは、JSで全体を縮小してA4 1枚に収める。 */
 .print-only,.print-only-inline,.score-top{display:none}
 @media print{
-  @page{size:A4 portrait;margin:6mm}
+  @page{size:A4 portrait;margin:5mm}
   .no-print{display:none !important}
 }
 html.sheet,html.sheet body{background:#fff}
-html.sheet body{width:198mm;font-size:9px;line-height:1.25;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html.sheet body{width:200mm;font-size:9px;line-height:1.25;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 html.sheet .no-print,html.sheet .screen-only,html.sheet #jaToKeiyakuWrap{display:none !important}
 html.sheet .print-only{display:block}
 html.sheet .print-only-inline{display:inline}
@@ -164,7 +164,7 @@ html.sheet .score-top{display:flex;gap:1.6mm;flex:0 0 auto}
 .score-top .st.main .v{font-size:30px;min-height:33px}
 
 html.sheet .wrap{padding:0;max-width:none}
-html.sheet .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:2mm;align-items:start}
+html.sheet .grid{display:grid;grid-template-columns:1fr 1fr;gap:2mm;align-items:start}
 html.sheet .card{break-inside:avoid;margin-bottom:2mm;border-radius:0;border:1px solid #666}
 html.sheet .card h2{padding:.5mm 2mm;font-size:9px;background:#333;color:#fff}
 html.sheet .card h2 .tag{display:none}
@@ -204,6 +204,33 @@ html.sheet .calc .box .v{font-size:11px}
 
 html.sheet .bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:2mm;align-items:stretch}
 html.sheet .bottom-row .card{margin-bottom:0}
+
+/* ── 用紙いっぱいに広げる（余った高さを展開図・記入欄・メモ欄へ配分）──
+   JSで body の高さを用紙ぴったりに固定したときだけ伸びる（sheet-fill） */
+html.sheet.sheet-fill body{display:flex;flex-direction:column}
+html.sheet.sheet-fill .wrap{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+html.sheet.sheet-fill .grid{flex:3 1 auto;align-items:stretch;margin-bottom:2mm}
+html.sheet.sheet-fill .grid>div{display:flex;flex-direction:column;min-height:0}
+html.sheet.sheet-fill .grid>div>.card{margin-bottom:2mm}
+html.sheet.sheet-fill .grid>div>.card.grow{flex:1 1 auto;margin-bottom:0}
+html.sheet.sheet-fill .grow{display:flex;flex-direction:column}
+html.sheet.sheet-fill .grow>.body{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+html.sheet.sheet-fill .diagram-box{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+html.sheet.sheet-fill svg#car{flex:1 1 auto;max-height:none;height:auto;min-height:0}
+html.sheet.sheet-fill .memo-lines{flex:1 1 auto}
+html.sheet.sheet-fill .bottom-row{flex:1 1 auto}
+html.sheet.sheet-fill .bottom-row .card{display:flex;flex-direction:column}
+html.sheet.sheet-fill .bottom-row .card>.body{flex:1 1 auto;display:flex;flex-direction:column}
+html.sheet.sheet-fill #notesCard .pbox{flex:1 1 auto}
+html.sheet.sheet-fill #inspCard .frow{flex:1 1 auto;grid-template-rows:1fr auto}
+html.sheet.sheet-fill #inspCard .c8{display:flex;flex-direction:column}
+html.sheet.sheet-fill #inspCard .c8 .pbox{flex:1 1 auto}
+/* 手書きメモ欄（印刷・PDFのみ） */
+.memo-card .body{padding:1.4mm 2mm}
+/* 罫線は高さの計算に入れない（absolute）ため、余った分だけ見える */
+.memo-lines{position:relative;min-height:8mm}
+.memo-lines .ln{position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden}
+.memo-lines i{display:block;height:6.4mm;border-bottom:1px solid #bbb}
 html.sheet #inspCard .frow{grid-template-columns:1fr 1fr}
 html.sheet #inspCard .c8{grid-column:1 / -1}
 html.sheet #inspCard .c2{grid-column:span 1}
@@ -308,6 +335,11 @@ html.sheet #inspCard .c2{grid-column:span 1}
         <div class="f c6"><label>取説・記録簿・整備手帳</label><input type="text" id="docs" placeholder="取説あり・記録簿あり(直近車検分)・整備手帳あり"></div>
       </div>
     </div>
+  </div>
+
+  <div class="card memo-card grow print-only">
+    <h2>メモ（手書き用）</h2>
+    <div class="body"><div class="memo-lines"><div class="ln"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
   </div>
 
   <div class="card score-card">
@@ -432,7 +464,7 @@ html.sheet #inspCard .c2{grid-column:span 1}
     </div>
   </div>
 
-  <div class="card">
+  <div class="card grow">
     <h2>展開図 <span class="tag">クリックで記号を記入</span></h2>
     <div class="body">
       <div class="diagram-box">
@@ -730,7 +762,7 @@ html.sheet #inspCard .c2{grid-column:span 1}
   });
 
   // ===== 車両状態表（A4 1枚）への切替 =====
-  const PX_PER_MM = 96/25.4, PAGE_W = 198*PX_PER_MM, PAGE_H = 285*PX_PER_MM;  // A4 − 余白6mm×2
+  const PX_PER_MM = 96/25.4, PAGE_W = 200*PX_PER_MM, PAGE_H = 287*PX_PER_MM;  // A4 − 余白5mm×2
   const MAX_SCALE = 1.15;  // 内容が少ないときは最大1.15倍まで拡大して用紙を広く使う
   const root = document.documentElement;
   function syncMirrors(){
@@ -739,10 +771,12 @@ html.sheet #inspCard .c2{grid-column:span 1}
       if(a && b) b.textContent = a.value;
     });
   }
-  // 内容量に合わせて幅と拡大・縮小率を求める（A4 1枚にちょうど収まる）
+  // 内容量に合わせて幅と拡大・縮小率を求め、最後に高さを用紙ぴったりに固定する
+  // （余った高さは展開図・記入欄・メモ欄が伸びて埋める）
   function fitSheet(){
     const body = document.body;
-    body.style.zoom = ""; body.style.width = "";
+    root.classList.remove("sheet-fill");
+    body.style.zoom = ""; body.style.width = ""; body.style.height = "";
     let scale = 1;
     for(let i=0;i<6;i++){
       body.style.width = (PAGE_W/scale) + "px";
@@ -752,6 +786,8 @@ html.sheet #inspCard .c2{grid-column:span 1}
       scale = need;
     }
     body.style.width = (PAGE_W/scale) + "px";
+    body.style.height = Math.floor((PAGE_H-2)/scale) + "px";
+    root.classList.add("sheet-fill");
     return scale;
   }
   function enterSheet(){
@@ -760,14 +796,14 @@ html.sheet #inspCard .c2{grid-column:span 1}
     return fitSheet();
   }
   function exitSheet(){
-    root.classList.remove("sheet");
-    document.body.style.zoom = ""; document.body.style.width = "";
+    root.classList.remove("sheet","sheet-fill");
+    document.body.style.zoom = ""; document.body.style.width = ""; document.body.style.height = "";
   }
 
   // ===== 印刷（従来どおり印刷画面から。PDF保存も可） =====
   function applyPrintSheet(){
     const sc = enterSheet();
-    if(sc !== 1) document.body.style.zoom = String(sc*0.985);
+    document.body.style.zoom = String(sc);
   }
   window.addEventListener("beforeprint", applyPrintSheet);
   window.addEventListener("afterprint", exitSheet);
@@ -836,10 +872,10 @@ html.sheet #inspCard .c2{grid-column:span 1}
       }).then(canvas=>{
         done();
         const pdf = new window.jspdf.jsPDF({orientation:"portrait", unit:"mm", format:"a4", compress:true});
-        const aw = 198, ah = 285;
+        const aw = 200, ah = 287;
         let iw = aw, ih = canvas.height*aw/canvas.width;
         if(ih > ah){ iw = iw*ah/ih; ih = ah; }
-        pdf.addImage(canvas.toDataURL("image/jpeg",0.95), "JPEG", 6+(aw-iw)/2, 6, iw, ih);
+        pdf.addImage(canvas.toDataURL("image/jpeg",0.95), "JPEG", 5+(aw-iw)/2, 5, iw, ih);
         const name = pdfName();
         pdf.setProperties({title:name, creator:"J-AUTO 車両査定システム"});
         return {blob: pdf.output("blob"), name: name+".pdf"};
