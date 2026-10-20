@@ -118,76 +118,110 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
 .btn:hover{filter:brightness(1.08)}
 
-/* ===== 印刷（PDF保存）：出品票1枚に収まるよう圧縮レイアウト ===== */
-.print-only{display:none}
+/* ===== PDF作成中・PDF完成パネル（画面のみ） ===== */
+#pdfBusy{display:none;position:fixed;inset:0;z-index:9998;background:var(--paper);
+  align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--navy);letter-spacing:.08em}
+#pdfBusy.on{display:flex}
+#pdfPanel{display:none;position:fixed;inset:0;z-index:9999;background:rgba(22,35,59,.55);align-items:flex-end;justify-content:center}
+#pdfPanel.open{display:flex}
+#pdfPanel .pb{background:#fff;width:100%;max-width:560px;border-radius:14px 14px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+#pdfPanel h3{font-size:15px;color:var(--navy);margin-bottom:8px;border-left:4px solid var(--amber);padding-left:8px}
+#pdfPanel .info{font-size:12.5px;color:#555;margin-bottom:12px;word-break:break-all}
+#pdfPanel button{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#FAFAF7;border-radius:10px;
+  padding:12px 14px;font-size:14px;font-family:inherit;cursor:pointer;margin-bottom:8px;color:var(--ink)}
+#pdfPanel button small{display:block;font-size:11px;color:#777;margin-top:2px}
+#pdfPanel button.main{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:700}
+#pdfPanel button.main small{color:#AEC1E0}
+.btn:disabled{opacity:.6;cursor:wait}
+
+/* ===== 車両状態表（A4縦1枚・印刷とPDFで共通）=====
+   印刷時・PDF作成時に <html class="sheet"> を付けてこのレイアウトに切り替える。
+   内容が多いときは、JSで全体を縮小してA4 1枚に収める。 */
+.print-only,.print-only-inline,.score-top{display:none}
 @media print{
-  @page{size:A4;margin:6mm}
-  html,body{background:#fff;font-size:9px;line-height:1.25}
-  header .date{display:block}
-  header{padding:3px 8px}
-  header h1{font-size:13px}
-  header .sub{font-size:8px}
+  @page{size:A4 portrait;margin:6mm}
   .no-print{display:none !important}
-  .print-only{display:block}
-  .wrap{padding:0;max-width:none}
-
-  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:6px;align-items:start}
-
-  .card{break-inside:avoid;margin-bottom:5px;border-radius:0;border:1px solid #888}
-  .card h2{padding:2px 6px;font-size:9.5px;background:#333 !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .card h2 .tag{display:none}
-  .card .body{padding:4px 6px}
-
-  .frow{gap:4px;margin-bottom:4px}
-  .f label{font-size:7.5px;color:#555;margin-bottom:0}
-  .f input,.f select,.f textarea{
-    border:none;border-bottom:1px solid #999;border-radius:0;padding:0 1px;font-size:9px;height:14px;min-height:0}
-  textarea{resize:none;overflow:hidden;height:auto !important;min-height:14px}
-
-  .inline{gap:4px}
-  .chk{border:none;padding:0 3px;font-size:8px;gap:2px}
-  .chk:not(:has(input:checked)){opacity:.3}
-  .chk input{width:9px;height:9px}
-
-  .score-row,.int-row{gap:3px}
-  .score-btn,.int-btn{display:none;padding:2px 3px;min-width:0;font-size:11px;border-width:1px}
-  .score-btn small{display:none}
-  .score-btn.on,.int-btn.on{display:inline-block;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#333 !important;color:#fff !important;border-color:#333 !important}
-
-  details.ref{display:none}
-
-  .pal-group{display:none}
-  .mode-hint{display:none}
-
-  .diagram-box{border:1px solid #888}
-  svg#car{max-height:190px;width:auto;margin:0 auto;display:block}
-
-  .marks-list{max-height:none;overflow:visible;border:1px solid #999}
-  .marks-list table{font-size:8px}
-  .marks-list th,.marks-list td{padding:1px 4px}
-  .mark circle{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-
-  .calc{gap:5px;margin-top:5px}
-  .calc .box{padding:3px 6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .calc .box .k{font-size:7.5px}
-  .calc .box .v{font-size:13px}
-  .calc-note{font-size:7px;margin-top:3px}
-
-  #notes,#inspector{font-size:9px;padding:3px 5px;min-height:30px}
-  .wrap > .card:nth-last-child(2),
-  .wrap > .card:nth-last-child(3){
-    display:inline-block;width:calc(50% - 4px);vertical-align:top;box-sizing:border-box;margin-right:6px
-  }
-  .wrap > .card:nth-last-child(2){margin-right:0}
 }
+html.sheet,html.sheet body{background:#fff}
+html.sheet body{width:198mm;font-size:9px;line-height:1.25;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html.sheet .no-print,html.sheet .screen-only,html.sheet #jaToKeiyakuWrap{display:none !important}
+html.sheet .print-only{display:block}
+html.sheet .print-only-inline{display:inline}
+
+/* 見出し＋総合評価点（いちばん上） */
+html.sheet header{background:#fff;color:#000;padding:0 0 1.6mm;margin-bottom:2mm;border-bottom:2px solid #000;
+  display:flex;align-items:flex-end;flex-wrap:nowrap;gap:3mm}
+html.sheet header .ttl{display:flex !important;flex-direction:column;gap:.8mm;min-width:0}
+html.sheet header h1{font-size:17px;letter-spacing:.22em}
+html.sheet header .sub{font-size:7.5px;color:#444}
+html.sheet header .date{margin-left:auto;font-size:9px;color:#000;white-space:nowrap;align-self:flex-end}
+html.sheet .score-top{display:flex;gap:1.6mm;flex:0 0 auto}
+.score-top .st{border:2px solid #000;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-width:22mm;padding:.8mm 2mm;background:#fff}
+.score-top .st.main{min-width:34mm;border-width:2.5px}
+.score-top .st .k{font-size:8px;font-weight:700;letter-spacing:.12em;white-space:nowrap}
+.score-top .st .v{font-size:24px;font-weight:800;line-height:1.1;min-height:27px;font-variant-numeric:tabular-nums}
+.score-top .st.main .v{font-size:30px;min-height:33px}
+
+html.sheet .wrap{padding:0;max-width:none}
+html.sheet .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:2mm;align-items:start}
+html.sheet .card{break-inside:avoid;margin-bottom:2mm;border-radius:0;border:1px solid #666}
+html.sheet .card h2{padding:.5mm 2mm;font-size:9px;background:#333;color:#fff}
+html.sheet .card h2 .tag{display:none}
+html.sheet .card .body{padding:1.4mm 2mm}
+html.sheet .pal-card,html.sheet .score-card{display:none}
+
+html.sheet .frow{gap:1.2mm 2mm;margin-bottom:1.3mm}
+/* スマホ幅用の1列表示を用紙レイアウトでは使わない（どの端末でも同じ用紙になるように） */
+html.sheet .c1{grid-column:span 1}html.sheet .c2{grid-column:span 2}html.sheet .c3{grid-column:span 3}html.sheet .c4{grid-column:span 4}
+html.sheet .c5{grid-column:span 5}html.sheet .c6{grid-column:span 6}html.sheet .c8{grid-column:span 8}html.sheet .c12{grid-column:span 12}
+html.sheet .f{gap:0}
+html.sheet .f label{font-size:7px;color:#555;letter-spacing:0}
+html.sheet .f input,html.sheet .f select{border:none;border-bottom:1px solid #999;border-radius:0;padding:0 1px;
+  font-size:9px;height:14px;min-height:0;background:transparent;-webkit-appearance:none;appearance:none;color:#000}
+html.sheet textarea{display:none !important}
+html.sheet input::placeholder{color:transparent !important}
+.pmirror{white-space:pre-wrap;overflow-wrap:anywhere;font-size:9px;line-height:1.35;color:#000;
+  border-bottom:1px solid #999;min-height:14px;padding:0 1px}
+html.sheet .pbox{border:1px solid #999;border-bottom-width:1px;min-height:15mm;padding:.8mm 1.2mm}
+
+html.sheet .inline{gap:.6mm 2.2mm}
+html.sheet .chk{border:none;padding:0;font-size:8.5px;gap:1px;background:none}
+html.sheet .chk:not(:has(input:checked)){opacity:.3}
+html.sheet .chk input{width:9px;height:9px;margin:0}
+
+html.sheet .diagram-box{border:1px solid #999;border-radius:0}
+html.sheet svg#car{width:100%;height:auto;max-height:122mm;margin:0 auto;display:block}
+html.sheet .marks-list,html.sheet .marks-ttl-screen{display:none}
+.marks-compact{font-size:8px;line-height:1.55;border:1px solid #999;padding:.8mm 1.4mm;min-height:7mm}
+.marks-compact .mi{display:inline-block;margin-right:2.6mm;white-space:nowrap}
+.marks-compact .mi b{margin-right:.8mm}
+.sym-legend{font-size:6.8px;color:#444;margin-top:.8mm;line-height:1.45}
+html.sheet .calc{margin-top:1.2mm;gap:1.5mm}
+html.sheet .calc .box{padding:.6mm 2mm;min-width:0;border-width:1px}
+html.sheet .calc .box .k{font-size:7px}
+html.sheet .calc .box .v{font-size:11px}
+
+html.sheet .bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:2mm;align-items:stretch}
+html.sheet .bottom-row .card{margin-bottom:0}
+html.sheet #inspCard .frow{grid-template-columns:1fr 1fr}
+html.sheet #inspCard .c8{grid-column:1 / -1}
+html.sheet #inspCard .c2{grid-column:span 1}
+.sheet-foot{font-size:6.5px;color:#888;text-align:right;margin-top:1mm}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>J-AUTO 車両査定システム</h1>
-  <span class="sub">ASワンプラ検査基準準拠｜出品票・検査記録</span>
+  <div class="ttl" style="display:contents">
+    <h1><span class="screen-only">J-AUTO 車両査定システム</span><span class="print-only-inline">J-AUTO 車両状態表</span></h1>
+    <span class="sub">ASワンプラ検査基準準拠｜出品票・検査記録</span>
+  </div>
   <span class="date" id="today">2026年7月5日</span>
+  <div class="score-top" aria-hidden="true">
+    <div class="st main"><span class="k">総合評価点</span><span class="v" id="stScore"></span></div>
+    <div class="st"><span class="k">内装評価</span><span class="v" id="stInt"></span></div>
+  </div>
 </header>
 
 <div class="wrap">
@@ -243,6 +277,7 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
       <div class="frow">
         <div class="f c12"><label>セールスポイント（120文字目安・社外品はメーカー/型番、名称は略さない）</label>
           <textarea id="sales" rows="2" maxlength="200" placeholder="社外ナビ(パナソニック ストラーダ CN-F1D)・バックモニター・LEDヘッドライト・両側パワースライドドア 等"></textarea>
+          <div class="pmirror print-only" id="salesP"></div>
         </div>
       </div>
     </div>
@@ -275,10 +310,10 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
     </div>
   </div>
 
-  <div class="card">
-    <h2>評価点・内装評価</h2>
+  <div class="card score-card">
+    <h2>総合評価点・内装評価 <span class="tag">印刷・PDFでは用紙のいちばん上に表示</span></h2>
     <div class="body">
-      <div class="f" style="margin-bottom:12px"><label>外装評価点（クリックで選択）</label>
+      <div class="f" style="margin-bottom:12px"><label>総合評価点（クリックで選択）</label>
         <div class="score-row" id="scoreRow">
           <button type="button" class="score-btn" data-v="S">S<small>無傷無補修</small></button>
           <button type="button" class="score-btn" data-v="6">6<small>3年3万km内</small></button>
@@ -329,7 +364,7 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 <!-- ============ 右カラム：展開図・記号 ============ -->
 <div>
 
-  <div class="card">
+  <div class="card pal-card">
     <h2>検査記号パレット <span class="tag">選択→展開図をクリックで記入</span></h2>
     <div class="body">
       <div class="mode-hint no-print" id="modeHint">記号を選んで展開図上をクリック（タップ）してください。<b>打った記号をクリックすると削除</b>できます。</div>
@@ -460,6 +495,7 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 
       <div style="margin-top:12px">
         <div class="gname" style="font-size:11px;color:#5B6470;margin-bottom:4px">記入済み記号一覧</div>
+        <div class="marks-compact print-only" id="marksCompact"></div>
         <div class="marks-list">
           <table id="marksTable">
             <thead><tr><th>記号</th><th>部位</th><th>pt</th><th class="no-print"></th></tr></thead>
@@ -468,12 +504,10 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
         </div>
       </div>
 
+      <div class="sym-legend print-only">A=キズ　U=ヘコミ　B=キズを伴うヘコミ　W=補修跡　S=さび（数字1〜3は程度）　×=交換要す　××=交換済　C=腐食　Pアト=ペイント跡</div>
       <div class="calc">
         <div class="box"><div class="k">合計ポイント（W1/W2除外・W3加算）</div><div class="v" id="ptTotal">0 pt</div></div>
-        <div class="box"><div class="k">ポイントによる評価点上限</div><div class="v" id="ptLimit">—</div></div>
       </div>
-      <div class="calc-note">上限目安：10pt以内→4.5／15pt以内→4／25pt以内→3.5／30pt以内→3。レベル数・パネル数・内装等の他条件もすべて満たす必要があります。</div>
-      <div class="calc-note" id="limitWarn" style="color:var(--red);font-weight:700;display:none">⚠ 選択中の評価点がポイント上限を超えています。評価点を見直してください。</div>
     </div>
   </div>
 
@@ -481,32 +515,49 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
 </div><!-- /grid -->
 
 <!-- ============ 下段：記入欄 ============ -->
-<div class="card">
+<div class="bottom-row">
+<div class="card" id="notesCard">
   <h2>注意事項・不具合箇所 <span class="tag">欠品・社外品・機関/機構/装備の不具合を必ず記載</span></h2>
   <div class="body">
     <textarea id="notes" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）エンジンオイルにじみあり／エアコン効き弱い／社外マフラー装着／リモコンキー欠品　※「外装小A・小B」「内外装仕上げ済み」「即納車可能」「禁煙車」等のあいまいな記載はクレーム対象になるため禁止"></textarea>
+    <div class="pmirror pbox print-only" id="notesP"></div>
   </div>
 </div>
 
-<div class="card">
+<div class="card" id="inspCard">
   <h2>検査員記入欄 <span class="tag">修復歴「有」の場合は修復箇所・交換箇所を記入</span></h2>
   <div class="body">
     <div class="frow">
       <div class="f c8"><label>記入内容（展開図で表現できないもの・オイル漏れ・下廻りの状態など）</label>
         <textarea id="inspector" rows="4" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:8px;font-family:inherit;font-size:14px" placeholder="例）右クォーター交換済（修復歴該当）／下廻り腐食小・穴なし／ドアミラーキズ／工具・ジャッキあり"></textarea>
+        <div class="pmirror pbox print-only" id="inspectorP"></div>
       </div>
       <div class="f c2"><label>査定担当</label><input type="text" id="staff" placeholder="クロサワ"></div>
       <div class="f c2"><label>査定日</label><input type="text" id="checkDate"></div>
     </div>
   </div>
 </div>
+</div><!-- /bottom-row -->
+<div class="sheet-foot print-only">J-AUTO 車両査定システム v2.0</div>
 
 <div class="actions no-print">
   <button type="button" class="btn ghost" id="resetBtn">入力をリセット</button>
-  <button type="button" class="btn primary" id="pdfBtn">🖨 PDFで保存（印刷）</button>
+  <button type="button" class="btn ghost" id="printBtn">🖨 印刷</button>
+  <button type="button" class="btn primary" id="pdfBtn">📄 PDFファイルを作成</button>
 </div>
 
 </div><!-- /wrap -->
+
+<div id="pdfBusy" class="no-print">PDFを作成中…</div>
+<div id="pdfPanel" class="no-print">
+  <div class="pb">
+    <h3>PDFができました</h3>
+    <div class="info" id="pdfInfo"></div>
+    <button type="button" class="main" id="pdfShare">共有・保存<small>「ファイルに保存」・AirDrop・LINE・メールなど</small></button>
+    <button type="button" id="pdfDownload">ダウンロード<small>パソコン・共有メニューが出ない端末用</small></button>
+    <button type="button" id="pdfClose">閉じる</button>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -624,30 +675,26 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
       });
     }
 
-    // ポイント集計
+    // ポイント集計（自動評価点の算出は廃止。合計ポイントのみ表示）
     const total = marks.reduce((s,m)=> s + (SYM[m.sym] ? SYM[m.sym].pt : 0), 0);
     document.getElementById("ptTotal").textContent = total + " pt";
-    let limit, limitNum;
-    if(total === 0){ limit = "—"; limitNum = 99; }
-    else if(total <= 10){ limit = "4.5 点"; limitNum = 4.5; }
-    else if(total <= 15){ limit = "4 点"; limitNum = 4; }
-    else if(total <= 25){ limit = "3.5 点"; limitNum = 3.5; }
-    else if(total <= 30){ limit = "3 点"; limitNum = 3; }
-    else { limit = "3点未満（2相当等）"; limitNum = 2; }
-    document.getElementById("ptLimit").textContent = limit;
 
-    // 警告：選択中評価点が上限超過
-    const warn = document.getElementById("limitWarn");
-    const sel = document.querySelector(".score-btn.on");
-    const selVal = sel ? sel.dataset.v : null;
-    const numMap = {"S":7,"6":6,"5":5,"4.5":4.5,"4":4,"3.5":3.5,"3":3,"2":2,"1":1,"R":0,"0":0};
-    if(sel && total > 0 && numMap[selVal] > limitNum && !["R","0","1","2"].includes(selVal)){
-      warn.style.display = "block";
-      document.getElementById("ptLimit").parentElement.classList.add("warn");
-    } else {
-      warn.style.display = "none";
-      document.getElementById("ptLimit").parentElement.classList.remove("warn");
+    // 印刷・PDF用の記号一覧（コンパクト表示）
+    const mc = document.getElementById("marksCompact");
+    if(mc){
+      mc.innerHTML = marks.length
+        ? marks.map(m=>'<span class="mi"><b>'+m.sym+'</b>'+m.panel+'</span>').join("")
+        : '<span style="color:#888">記入なし</span>';
     }
+    updateScoreTop();
+  }
+
+  // 総合評価点・内装評価を用紙最上部の枠へ反映
+  function updateScoreTop(){
+    const sc = document.querySelector("#scoreRow .score-btn.on");
+    const it = document.querySelector("#intRow .int-btn.on");
+    document.getElementById("stScore").textContent = sc ? sc.dataset.v : "";
+    document.getElementById("stInt").textContent = it ? it.dataset.v : "";
   }
 
   // ===== 評価点・内装点ボタン =====
@@ -664,6 +711,7 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
       const was = b.classList.contains("on");
       document.querySelectorAll("#intRow .int-btn").forEach(x=>x.classList.remove("on"));
       if(!was) b.classList.add("on");
+      updateScoreTop();
     });
   });
 
@@ -681,15 +729,163 @@ svg#car{display:block;width:100%;height:auto;touch-action:manipulation}
     updateHint(); render();
   });
 
-  // ===== PDF保存（印刷） =====
-  document.getElementById("pdfBtn").addEventListener("click", ()=>{
-    // textareaの内容を印刷でも全文表示できるよう高さ調整
-    document.querySelectorAll("textarea").forEach(t=>{
-      t.style.height = "auto";
-      t.style.height = (t.scrollHeight + 4) + "px";
+  // ===== 車両状態表（A4 1枚）への切替 =====
+  const PX_PER_MM = 96/25.4, PAGE_W = 198*PX_PER_MM, PAGE_H = 285*PX_PER_MM;  // A4 − 余白6mm×2
+  const MAX_SCALE = 1.15;  // 内容が少ないときは最大1.15倍まで拡大して用紙を広く使う
+  const root = document.documentElement;
+  function syncMirrors(){
+    [["sales","salesP"],["notes","notesP"],["inspector","inspectorP"]].forEach(([src,dst])=>{
+      const a = document.getElementById(src), b = document.getElementById(dst);
+      if(a && b) b.textContent = a.value;
     });
-    window.print();
+  }
+  // 内容量に合わせて幅と拡大・縮小率を求める（A4 1枚にちょうど収まる）
+  function fitSheet(){
+    const body = document.body;
+    body.style.zoom = ""; body.style.width = "";
+    let scale = 1;
+    for(let i=0;i<6;i++){
+      body.style.width = (PAGE_W/scale) + "px";
+      const h = body.scrollHeight;
+      const need = Math.min(MAX_SCALE, PAGE_H/h);
+      if(Math.abs(need-scale) < 0.003) { scale = Math.min(scale, need); break; }
+      scale = need;
+    }
+    body.style.width = (PAGE_W/scale) + "px";
+    return scale;
+  }
+  function enterSheet(){
+    syncMirrors(); updateScoreTop();
+    root.classList.add("sheet");
+    return fitSheet();
+  }
+  function exitSheet(){
+    root.classList.remove("sheet");
+    document.body.style.zoom = ""; document.body.style.width = "";
+  }
+
+  // ===== 印刷（従来どおり印刷画面から。PDF保存も可） =====
+  function applyPrintSheet(){
+    const sc = enterSheet();
+    if(sc !== 1) document.body.style.zoom = String(sc*0.985);
+  }
+  window.addEventListener("beforeprint", applyPrintSheet);
+  window.addEventListener("afterprint", exitSheet);
+  document.getElementById("printBtn").addEventListener("click", ()=>{
+    applyPrintSheet();
+    setTimeout(()=>{ try{ window.print(); }catch(e){ exitSheet(); alert("この画面では印刷が使えません。「PDFファイルを作成」をお使いください。"); } }, 50);
   });
+
+  // ===== PDFファイル作成（iPhoneのホーム画面アプリでも動く方式） =====
+  const PDF_LIBS = [
+    "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+  ];
+  let libsPromise = null;
+  function loadScript(src){
+    return new Promise((res,rej)=>{
+      const s = document.createElement("script");
+      s.src = src; s.async = true; s.crossOrigin = "anonymous";
+      s.onload = ()=>res();
+      s.onerror = ()=>{ s.remove(); rej(new Error("load failed: "+src)); };
+      document.head.appendChild(s);
+    });
+  }
+  function loadPdfLibs(){
+    if(window.html2canvas && window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+    if(!libsPromise) libsPromise = Promise.all(PDF_LIBS.map(loadScript)).catch(e=>{ libsPromise=null; throw e; });
+    return libsPromise;
+  }
+  function pdfName(){
+    const v = id => (document.getElementById(id).value||"").trim();
+    const d = new Date(), ds = d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2);
+    return ("車両状態表_"+(v("carName")||"車名未入力")+"_"+ds).replace(/[\\\/:*?"<>|\s]+/g,"_");
+  }
+  // html2canvasは外部CSSをSVGへ反映しないため、展開図の色・線・文字設定を直接書き込む
+  function prepareClone(doc){
+    // 空欄の入力欄に入力例（placeholder）が印字されないようにする
+    doc.querySelectorAll("input[placeholder],textarea[placeholder]").forEach(el=>el.removeAttribute("placeholder"));
+    inlineSvgStyles(doc);
+  }
+  function inlineSvgStyles(doc){
+    const svgEl = doc.getElementById("car"); if(!svgEl) return;
+    const win = doc.defaultView;
+    const props = ["fill","stroke","stroke-width","font-size","font-weight","font-family","text-anchor","dominant-baseline","opacity"];
+    svgEl.querySelectorAll("*").forEach(el=>{
+      const cs = win.getComputedStyle(el);
+      props.forEach(p=>{ const v = cs.getPropertyValue(p); if(v) el.style.setProperty(p, v); });
+    });
+    const r = svgEl.getBoundingClientRect();
+    svgEl.setAttribute("width", r.width); svgEl.setAttribute("height", r.height);
+  }
+  function buildPdf(){
+    return loadPdfLibs().then(()=>{
+      const busy = document.getElementById("pdfBusy");
+      busy.classList.add("on");
+      const sx = window.scrollX, sy = window.scrollY;
+      enterSheet();
+      window.scrollTo(0,0);
+      const body = document.body;
+      const w = Math.ceil(body.scrollWidth), h = Math.ceil(body.scrollHeight);
+      const done = ()=>{ exitSheet(); busy.classList.remove("on"); window.scrollTo(sx,sy); };
+      return window.html2canvas(body, {
+        scale: 2.5, backgroundColor: "#ffffff", logging: false, useCORS: true,
+        width: w, height: h, windowWidth: w, windowHeight: h, scrollX: 0, scrollY: 0,
+        ignoreElements: el => el.id==="pdfBusy" || el.id==="pdfPanel",
+        onclone: prepareClone
+      }).then(canvas=>{
+        done();
+        const pdf = new window.jspdf.jsPDF({orientation:"portrait", unit:"mm", format:"a4", compress:true});
+        const aw = 198, ah = 285;
+        let iw = aw, ih = canvas.height*aw/canvas.width;
+        if(ih > ah){ iw = iw*ah/ih; ih = ah; }
+        pdf.addImage(canvas.toDataURL("image/jpeg",0.95), "JPEG", 6+(aw-iw)/2, 6, iw, ih);
+        const name = pdfName();
+        pdf.setProperties({title:name, creator:"J-AUTO 車両査定システム"});
+        return {blob: pdf.output("blob"), name: name+".pdf"};
+      }, e=>{ done(); throw e; });
+    });
+  }
+  let lastPdf = null;
+  function downloadPdf(p){
+    const url = URL.createObjectURL(p.blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = p.name; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+  }
+  function sharePdf(p){
+    let file = null;
+    try{ file = new File([p.blob], p.name, {type:"application/pdf"}); }catch(e){}
+    if(file && navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({files:[file], title:p.name.replace(/\.pdf$/,"")}).catch(e=>{
+        if(e && e.name==="AbortError") return;
+        downloadPdf(p);
+      });
+    } else downloadPdf(p);
+  }
+  const pdfBtn = document.getElementById("pdfBtn"), pdfPanel = document.getElementById("pdfPanel");
+  pdfBtn.addEventListener("click", ()=>{
+    if(pdfBtn.disabled) return;
+    const label = pdfBtn.textContent;
+    pdfBtn.disabled = true; pdfBtn.textContent = "作成中…";
+    buildPdf().then(p=>{
+      lastPdf = p;
+      document.getElementById("pdfInfo").textContent = p.name+"（"+Math.max(1,Math.round(p.blob.size/1024))+"KB）";
+      pdfPanel.classList.add("open");
+    }).catch(e=>{
+      if(window.console) console.error(e);
+      alert(!(window.html2canvas && window.jspdf)
+        ? "通信できずPDFを作れません。電波の良い場所で再度お試しください。"
+        : "PDF作成に失敗しました。「印刷」ボタンからPDF保存をお試しください。");
+    }).then(()=>{ pdfBtn.disabled = false; pdfBtn.textContent = label; });
+  });
+  document.getElementById("pdfShare").addEventListener("click", ()=>{ if(lastPdf) sharePdf(lastPdf); });
+  document.getElementById("pdfDownload").addEventListener("click", ()=>{ if(lastPdf) downloadPdf(lastPdf); });
+  document.getElementById("pdfClose").addEventListener("click", ()=>pdfPanel.classList.remove("open"));
+  pdfPanel.addEventListener("click", e=>{ if(e.target===pdfPanel) pdfPanel.classList.remove("open"); });
+  // 電波のあるうちにPDF用部品を準備（失敗しても査定機能には影響なし）
+  setTimeout(()=>{ loadPdfLibs().catch(()=>{}); }, 1500);
 
   render();
 })();
