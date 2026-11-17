@@ -602,6 +602,13 @@ html.sheet #inspCard .c2{grid-column:span 1}
 </div><!-- /bottom-row -->
 <div class="sheet-foot print-only">J-AUTO 車両査定システム v2.0</div>
 
+<div class="hist-bar no-print">
+  <span id="histStatus" class="hist-status">新しい査定</span>
+  <span class="hist-btns">
+    <button type="button" class="btn ghost" id="histListBtn">📂 履歴を見る</button>
+    <button type="button" class="btn primary" id="histSaveBtn">💾 保存</button>
+  </span>
+</div>
 <div class="actions no-print">
   <button type="button" class="btn ghost" id="resetBtn">入力をリセット</button>
   <button type="button" class="btn ghost" id="printBtn">🖨 印刷</button>
@@ -772,6 +779,21 @@ html.sheet #inspCard .c2{grid-column:span 1}
     document.getElementById("stInt").textContent = it ? it.dataset.v : "";
   }
 
+  // ===== 査定履歴（保存・呼び出し）用の窓口 =====
+  window.JASatei = {
+    getMarks: ()=> marks.map(m=>({sym:m.sym, x:m.x, y:m.y, panel:m.panel})),
+    setMarks: (arr)=>{
+      seq = 0;
+      marks = (Array.isArray(arr) ? arr : []).filter(m=>m && m.sym).map(m=>({
+        id: ++seq, sym: String(m.sym), x: Number(m.x)||0, y: Number(m.y)||0, panel: String(m.panel||"その他")
+      }));
+      currentSym = null;
+      document.querySelectorAll(".sym").forEach(b=>b.classList.remove("on"));
+      updateHint(); render();
+    },
+    today: dateStr
+  };
+
   // ===== 評価点・内装点ボタン =====
   document.querySelectorAll("#scoreRow .score-btn").forEach(b=>{
     b.addEventListener("click", ()=>{
@@ -802,6 +824,7 @@ html.sheet #inspCard .c2{grid-column:span 1}
     document.querySelectorAll(".sym").forEach(b=>b.classList.remove("on"));
     document.getElementById("checkDate").value = dateStr;
     updateHint(); render();
+    document.dispatchEvent(new Event("ja:reset"));
   });
 
   // ===== リサイクル料金 照会補助 =====
@@ -1114,6 +1137,296 @@ html.sheet #inspCard .c2{grid-column:span 1}
         link.href = KEIYAKU_URL;
       }
     });
+  }catch(e){ /* 査定システム本体には影響させない */ }
+})();
+</script>
+
+<!-- ===== 査定履歴（保存・呼び出し）: Supabase ===== -->
+<style>
+.hist-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 0 0}
+.hist-status{font-size:12.5px;color:var(--gray)}
+.hist-status.saved{color:var(--teal);font-weight:700}
+.hist-btns{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.bpanel .hist-in{width:100%;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:16px;font-family:inherit;margin-bottom:8px}
+.hist-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#666;margin:2px 0 8px}
+.bpanel .hist-meta button{display:inline-block;width:auto;margin:0;padding:5px 10px;font-size:12px;border-radius:6px}
+.hist-list{list-style:none;margin:0 0 10px;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.hist-list li{display:flex;align-items:stretch;border-bottom:1px solid var(--line2)}
+.hist-list li:last-child{border-bottom:none}
+.hist-list li.cur{box-shadow:inset 4px 0 0 var(--teal)}
+.bpanel .hist-list button.hl-open{flex:1;width:auto;margin:0;border:none;border-radius:0;background:#fff;padding:10px 12px}
+.hl-open b{display:block;font-size:14px;color:var(--navy)}
+.hl-open span{display:block;font-size:11.5px;color:#666;margin-top:2px}
+.bpanel .hist-list button.hl-del{width:auto;margin:0;border:none;border-left:1px solid var(--line2);border-radius:0;background:#fff;color:var(--red);padding:0 14px;font-size:12px}
+.hist-empty{padding:18px;text-align:center;color:#888;font-size:13px}
+.hist-err{display:none;background:#FCEBEB;color:#791F1F;border-radius:6px;padding:8px 10px;font-size:12.5px;margin-bottom:10px}
+@media print{.hist-bar{display:none !important}}
+</style>
+
+<div id="loginPanel" class="bpanel no-print">
+  <div class="pb">
+    <h3>履歴を使うにはログイン</h3>
+    <div class="info">お店の共通アカウントでログインします。一度ログインすると、この端末ではしばらくログインしたままになります。</div>
+    <div class="hist-err" id="loginErr"></div>
+    <input class="hist-in" type="email" id="loginEmail" placeholder="メールアドレス" autocomplete="username">
+    <input class="hist-in" type="password" id="loginPass" placeholder="パスワード" autocomplete="current-password">
+    <button type="button" class="main" id="loginGo">ログイン</button>
+    <button type="button" id="loginClose">閉じる</button>
+  </div>
+</div>
+
+<div id="savePanel" class="bpanel no-print">
+  <div class="pb">
+    <h3>保存のしかた</h3>
+    <div class="info">履歴から呼び出した査定を開いています。</div>
+    <button type="button" class="main" id="saveOver">上書き保存<small>呼び出した査定を、今の内容に更新します</small></button>
+    <button type="button" id="saveNew">新しい査定として保存<small>元の査定は残したまま、別の履歴として保存します</small></button>
+    <button type="button" id="saveClose">やめる</button>
+  </div>
+</div>
+
+<div id="histPanel" class="bpanel no-print">
+  <div class="pb">
+    <h3>査定履歴</h3>
+    <input class="hist-in" type="search" id="histSearch" placeholder="車名・登録No.などで検索">
+    <div class="hist-meta"><span id="histCount"></span><span><span id="histWho"></span> <button type="button" id="histLogout">ログアウト</button></span></div>
+    <div class="hist-err" id="histErr"></div>
+    <ul class="hist-list" id="histList"></ul>
+    <button type="button" id="histClose">閉じる</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ▼ Supabaseの設定（プロジェクトの「Project URL」と「anon public」キーを貼る）
+  //   ※ service_role キーは絶対にここへ書かないこと
+  var SUPABASE_URL = "";
+  var SUPABASE_ANON_KEY = "";
+  var TABLE = "satei_records";
+  var LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js";
+
+  try{
+  var $ = function(id){ return document.getElementById(id); };
+  var client = null, clientP = null, currentId = null, cache = null, pending = null;
+  var LIST_COLS = "id,created_at,updated_at,satei_date,car_name,grade,reg_no,frame_no,odo,staff";
+
+  function configured(){ return !!(SUPABASE_URL && SUPABASE_ANON_KEY); }
+  function getClient(){
+    if(client) return Promise.resolve(client);
+    if(!clientP){
+      clientP = new Promise(function(res, rej){
+        if(window.supabase && window.supabase.createClient) return res();
+        var s = document.createElement("script");
+        s.src = LIB; s.async = true; s.crossOrigin = "anonymous";
+        s.onload = function(){ res(); };
+        s.onerror = function(){ s.remove(); rej(new Error("ネットにつながっていないため、履歴機能を読み込めませんでした。")); };
+        document.head.appendChild(s);
+      }).then(function(){
+        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return client;
+      }).catch(function(e){ clientP = null; throw e; });
+    }
+    return clientP;
+  }
+  function getSession(){
+    return getClient().then(function(c){ return c.auth.getSession(); })
+      .then(function(r){ return r.data ? r.data.session : null; });
+  }
+  function errText(e){
+    var m = (e && (e.message || e.error_description)) || String(e || "");
+    if(/JWT|session|auth|row-level security|permission/i.test(m)) return "ログインが切れている可能性があります。もう一度ログインしてください。";
+    if(/fetch|network|Failed to/i.test(m)) return "通信できませんでした。電波の良い場所でもう一度試してください。";
+    return m;
+  }
+  function showErr(id, msg){ var el = $(id); el.textContent = msg; el.style.display = "block"; }
+  function stamp(t){
+    var x = new Date(t); if(isNaN(x)) return "";
+    return x.getFullYear()+"/"+(x.getMonth()+1)+"/"+x.getDate()+" "+("0"+x.getHours()).slice(-2)+":"+("0"+x.getMinutes()).slice(-2);
+  }
+  function setStatus(text, saved){ var s = $("histStatus"); s.textContent = text; s.classList.toggle("saved", !!saved); }
+
+  // ===== 画面の入力内容 ⇄ 保存データ =====
+  function wrap(){ return document.querySelector(".wrap"); }
+  function collect(){
+    var w = wrap();
+    var d = {v:1, fields:{}, checks:{}, equip:[], odoFlag:"", score:"", int:"",
+             marks: window.JASatei ? window.JASatei.getMarks() : []};
+    w.querySelectorAll("input[type=text][id], textarea[id], select[id]").forEach(function(el){ d.fields[el.id] = el.value; });
+    w.querySelectorAll("input[type=checkbox]").forEach(function(el){
+      if(el.id) d.checks[el.id] = el.checked;
+      else if(el.checked) d.equip.push(el.value);
+    });
+    var r = w.querySelector("input[name=odoFlag]:checked"); d.odoFlag = r ? r.value : "";
+    var sc = document.querySelector("#scoreRow .score-btn.on"); d.score = sc ? sc.dataset.v : "";
+    var it = document.querySelector("#intRow .int-btn.on");   d.int = it ? it.dataset.v : "";
+    return d;
+  }
+  function apply(d){
+    d = d || {};
+    var w = wrap(), f = d.fields || {}, ch = d.checks || {}, eq = d.equip || [];
+    w.querySelectorAll("input[type=text][id], textarea[id], select[id]").forEach(function(el){
+      var v = Object.prototype.hasOwnProperty.call(f, el.id) ? f[el.id] : "";
+      el.value = v;
+      if(el.tagName === "SELECT" && el.selectedIndex < 0) el.selectedIndex = 0;
+    });
+    w.querySelectorAll("input[type=checkbox]").forEach(function(el){
+      el.checked = el.id ? !!ch[el.id] : eq.indexOf(el.value) >= 0;
+    });
+    w.querySelectorAll("input[name=odoFlag]").forEach(function(el){ el.checked = (el.value === (d.odoFlag || "")); });
+    document.querySelectorAll("#scoreRow .score-btn").forEach(function(b){ b.classList.toggle("on", !!d.score && b.dataset.v === d.score); });
+    document.querySelectorAll("#intRow .int-btn").forEach(function(b){ b.classList.toggle("on", !!d.int && b.dataset.v === d.int); });
+    if(window.JASatei) window.JASatei.setMarks(d.marks || []);   // 展開図・記号一覧・評価点欄も描き直す
+  }
+  function summary(d){
+    var f = d.fields || {};
+    return { satei_date: f.checkDate || "", car_name: f.carName || "", grade: f.grade || "",
+             reg_no: f.regNo || "", frame_no: f.frameNo || "", odo: f.odo || "", staff: f.staff || "" };
+  }
+
+  // ===== ログイン =====
+  function needLogin(next){
+    if(!configured()){ alert("履歴機能はまだ設定されていません。\n（SupabaseのURLとキーを設定すると使えるようになります）"); return; }
+    getSession().then(function(s){
+      if(s) next(); else { pending = next; openLogin(); }
+    }).catch(function(e){ alert(errText(e)); });
+  }
+  function openLogin(){
+    $("loginErr").style.display = "none";
+    $("loginPanel").classList.add("open");
+    setTimeout(function(){ $("loginEmail").focus(); }, 50);
+  }
+  function doLogin(){
+    var em = $("loginEmail").value.trim(), pw = $("loginPass").value, b = $("loginGo");
+    if(!em || !pw){ showErr("loginErr", "メールアドレスとパスワードを入れてください。"); return; }
+    b.disabled = true;
+    getClient().then(function(c){ return c.auth.signInWithPassword({email: em, password: pw}); })
+      .then(function(r){
+        b.disabled = false;
+        if(r.error){ showErr("loginErr", "ログインできませんでした。メールアドレスかパスワードが違います。"); return; }
+        $("loginPass").value = "";
+        $("loginPanel").classList.remove("open");
+        var n = pending; pending = null; if(n) n();
+      })
+      .catch(function(e){ b.disabled = false; showErr("loginErr", errText(e)); });
+  }
+  $("loginGo").addEventListener("click", doLogin);
+  $("loginPass").addEventListener("keydown", function(e){ if(e.key === "Enter") doLogin(); });
+  $("loginClose").addEventListener("click", function(){ pending = null; $("loginPanel").classList.remove("open"); });
+
+  // ===== 保存 =====
+  $("histSaveBtn").addEventListener("click", function(){
+    var d = collect();
+    if(!d.fields.carName && !d.fields.regNo && !d.marks.length){ alert("車名か登録No.を入れてから保存してください。"); return; }
+    needLogin(function(){ if(currentId) $("savePanel").classList.add("open"); else doSave(false); });
+  });
+  function doSave(overwrite){
+    $("savePanel").classList.remove("open");
+    var d = collect(), row = summary(d);
+    row.data = d; row.updated_at = new Date().toISOString();
+    var btn = $("histSaveBtn"), lbl = btn.textContent;
+    btn.disabled = true; btn.textContent = "保存中…";
+    getClient().then(function(c){
+      return (overwrite && currentId)
+        ? c.from(TABLE).update(row).eq("id", currentId).select("id,updated_at").single()
+        : c.from(TABLE).insert(row).select("id,updated_at").single();
+    }).then(function(r){
+      if(r.error) throw r.error;
+      currentId = r.data.id; cache = null;
+      setStatus("保存済み " + stamp(r.data.updated_at) + "（" + (row.car_name || "車名なし") + "）", true);
+    }).catch(function(e){
+      alert("保存できませんでした。\n" + errText(e));
+    }).then(function(){ btn.disabled = false; btn.textContent = lbl; });
+  }
+  $("saveOver").addEventListener("click", function(){ doSave(true); });
+  $("saveNew").addEventListener("click", function(){ doSave(false); });
+  $("saveClose").addEventListener("click", function(){ $("savePanel").classList.remove("open"); });
+
+  // ===== 履歴一覧 =====
+  $("histListBtn").addEventListener("click", function(){ needLogin(openHist); });
+  function openHist(){
+    $("histErr").style.display = "none";
+    $("histPanel").classList.add("open");
+    getSession().then(function(s){ $("histWho").textContent = (s && s.user) ? s.user.email : ""; }).catch(function(){});
+    if(cache){ draw(); return; }
+    $("histList").innerHTML = '<li class="hist-empty">読み込み中…</li>';
+    getClient().then(function(c){
+      return c.from(TABLE).select(LIST_COLS).order("updated_at", {ascending: false}).limit(500);
+    }).then(function(r){
+      if(r.error) throw r.error;
+      cache = r.data || []; draw();
+    }).catch(function(e){
+      $("histList").innerHTML = "";
+      showErr("histErr", "履歴を読み込めませんでした。" + errText(e));
+    });
+  }
+  function norm(t){ return String(t || "").normalize("NFKC").toLowerCase().replace(/\s+/g, ""); }
+  function draw(){
+    var all = cache || [], q = norm($("histSearch").value), ul = $("histList");
+    var rows = all.filter(function(x){
+      return !q || norm([x.car_name, x.grade, x.reg_no, x.frame_no, x.staff, x.satei_date].join(" ")).indexOf(q) >= 0;
+    });
+    $("histCount").textContent = all.length ? (rows.length + "件" + (q ? "（全" + all.length + "件中）" : "")) : "";
+    ul.innerHTML = "";
+    if(!rows.length){
+      var e = document.createElement("li"); e.className = "hist-empty";
+      e.textContent = all.length ? "見つかりませんでした" : "まだ保存された査定はありません";
+      ul.appendChild(e); return;
+    }
+    rows.forEach(function(x){
+      var li = document.createElement("li");
+      if(x.id === currentId) li.className = "cur";
+      var b = document.createElement("button"); b.type = "button"; b.className = "hl-open";
+      var t = document.createElement("b"); t.textContent = (x.car_name || "（車名なし）") + (x.grade ? "　" + x.grade : "");
+      var odo = x.odo ? (/^[\d,]+$/.test(String(x.odo).trim()) ? x.odo + "km" : x.odo) : "";
+      var s = document.createElement("span");
+      s.textContent = [x.satei_date || stamp(x.created_at), x.reg_no, odo, x.staff].filter(Boolean).join("｜");
+      b.appendChild(t); b.appendChild(s);
+      b.addEventListener("click", function(){ load(x); });
+      var del = document.createElement("button"); del.type = "button"; del.className = "hl-del"; del.textContent = "削除";
+      del.addEventListener("click", function(){ removeRec(x); });
+      li.appendChild(b); li.appendChild(del); ul.appendChild(li);
+    });
+  }
+  $("histSearch").addEventListener("input", draw);
+  function load(x){
+    if(!confirm("「" + (x.car_name || "車名なし") + "」を呼び出します。\n今の画面の入力内容は置き換わります。")) return;
+    getClient().then(function(c){ return c.from(TABLE).select("id,updated_at,data").eq("id", x.id).single(); })
+      .then(function(r){
+        if(r.error) throw r.error;
+        apply(r.data.data);
+        currentId = r.data.id;
+        setStatus("呼び出し中：" + (x.car_name || "車名なし") + "（" + stamp(r.data.updated_at) + " 保存）", true);
+        $("histPanel").classList.remove("open");
+        window.scrollTo(0, 0);
+      })
+      .catch(function(e){ alert("呼び出せませんでした。\n" + errText(e)); });
+  }
+  function removeRec(x){
+    if(!confirm("「" + (x.car_name || "車名なし") + "」の履歴を削除します。\n削除すると元に戻せません。よろしいですか？")) return;
+    getClient().then(function(c){ return c.from(TABLE).delete().eq("id", x.id); })
+      .then(function(r){
+        if(r.error) throw r.error;
+        cache = (cache || []).filter(function(y){ return y.id !== x.id; });
+        if(currentId === x.id){ currentId = null; setStatus("新しい査定（呼び出していた履歴は削除済み）"); }
+        draw();
+      })
+      .catch(function(e){ alert("削除できませんでした。\n" + errText(e)); });
+  }
+  $("histLogout").addEventListener("click", function(){
+    if(!confirm("この端末からログアウトしますか？")) return;
+    getClient().then(function(c){ return c.auth.signOut(); }).catch(function(){})
+      .then(function(){ cache = null; $("histPanel").classList.remove("open"); });
+  });
+  $("histClose").addEventListener("click", function(){ $("histPanel").classList.remove("open"); });
+
+  ["loginPanel", "savePanel", "histPanel"].forEach(function(id){
+    $(id).addEventListener("click", function(e){ if(e.target === $(id)){ $(id).classList.remove("open"); if(id === "loginPanel") pending = null; } });
+  });
+
+  // 「入力をリセット」で新しい査定に戻す
+  document.addEventListener("ja:reset", function(){ currentId = null; setStatus("新しい査定"); });
+  if(!configured()) setStatus("新しい査定（履歴機能は設定前）");
   }catch(e){ /* 査定システム本体には影響させない */ }
 })();
 </script>
